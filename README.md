@@ -62,6 +62,7 @@ Version simple pour le lancement :
 - 10 tampons = 20% de remise.
 - Chaque avantage peut etre marque comme utilise par l'equipe.
 - Apres utilisation du palier final de 20%, une nouvelle carte repart a 0 tampon.
+- Une carte ne peut recevoir qu'un seul tampon par jour.
 
 La recompense exacte reste a definir par Flam's : flammekueche offerte, dessert offert, boisson offerte, remise, menu, etc.
 

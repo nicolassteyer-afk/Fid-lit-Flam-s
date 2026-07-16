@@ -318,7 +318,8 @@ select {
   width: 28%;
 }
 
-.card-illustration {
+.card-illustration,
+.stamp-board {
   align-items: center;
   background: rgba(255, 248, 232, 0.98);
   border: 1px solid rgba(255, 255, 255, 0.46);
@@ -330,12 +331,45 @@ select {
   padding: 12px;
 }
 
-.card-illustration img {
+.card-illustration img,
+.stamp-board > img {
   display: block;
   max-height: 150px;
   max-width: 100%;
   object-fit: contain;
   width: 100%;
+}
+
+.stamp-board {
+  aspect-ratio: 550 / 600;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  isolation: isolate;
+  min-height: 0;
+  padding: 0;
+  position: relative;
+}
+
+.stamp-board > img {
+  height: 100%;
+  max-height: none;
+  position: relative;
+  z-index: 0;
+}
+
+.stamp-board .stamp-grid {
+  bottom: 15%;
+  left: 13%;
+  position: absolute;
+  right: 13%;
+  top: 20%;
+  transform: rotate(-7deg);
+  z-index: 1;
+}
+
+.sample-board .stamp-grid {
+  opacity: 0.85;
 }
 
 .stamp-grid {
@@ -345,22 +379,22 @@ select {
 }
 
 .client-stamps {
-  gap: 8px;
+  gap: clamp(6px, 1.8vw, 10px);
 }
 
 .stamp {
   aspect-ratio: 1;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px dashed rgba(255, 255, 255, 0.42);
+  background: rgba(255, 248, 232, 0.32);
+  border: 2px dashed rgba(97, 24, 30, 0.4);
   border-radius: 50%;
   min-width: 0;
   position: relative;
 }
 
 .stamp.is-filled {
-  background: var(--gold);
-  border-color: var(--gold);
-  box-shadow: inset 0 0 0 5px rgba(255, 255, 255, 0.35);
+  background: rgba(240, 179, 35, 0.94);
+  border-color: rgba(97, 24, 30, 0.78);
+  box-shadow: inset 0 0 0 5px rgba(255, 248, 232, 0.35), 0 4px 10px rgba(33, 31, 28, 0.18);
 }
 
 .stamp.is-milestone {

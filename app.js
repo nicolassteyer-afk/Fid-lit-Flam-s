@@ -111,6 +111,17 @@ function renderStamps(container, stampCount) {
   }
 }
 
+function getTodayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function hasStampToday(cardNumber) {
+  const today = getTodayKey();
+  return state.events.some((event) => {
+    return event.cardNumber === cardNumber && event.type === "stamp_added" && event.createdAt.slice(0, 10) === today;
+  });
+}
+
 function hashCardNumber(value) {
   return [...value].reduce((hash, char) => {
     return (hash * 31 + char.charCodeAt(0)) >>> 0;
@@ -390,6 +401,7 @@ function renderStaffCard(card) {
   const rewardReady = remaining <= 0;
   const currentBenefit = getCurrentBenefit(card.stampCount);
   const availableBenefit = getAvailableBenefit(card);
+  const stampedToday = hasStampToday(card.cardNumber);
   const restaurant = getRestaurant(card.restaurantId);
   const lastEvent = state.events.find((event) => event.cardNumber === card.cardNumber);
 
@@ -410,9 +422,10 @@ function renderStaffCard(card) {
       </div>
       <div class="stamp-grid" id="staff-stamps"></div>
       <div class="staff-actions">
-        <button class="primary" type="button" id="add-stamp" ${rewardReady ? "disabled" : ""}>Ajouter un tampon</button>
+        <button class="primary" type="button" id="add-stamp" ${rewardReady || stampedToday ? "disabled" : ""}>Ajouter un tampon</button>
         <button class="secondary" type="button" id="redeem-reward" ${availableBenefit ? "" : "disabled"}>Utiliser l'avantage</button>
       </div>
+      ${stampedToday ? `<p class="customer-line">Tampon deja ajoute aujourd'hui pour cette carte.</p>` : ""}
       <div>
         <h3>Historique carte</h3>
         <div class="event-list compact" id="staff-history"></div>
@@ -440,6 +453,11 @@ function renderStaffHistory(card) {
 function addStamp(cardNumber) {
   const card = state.cards.find((item) => item.cardNumber === cardNumber);
   if (!card || card.stampCount >= STAMP_TARGET) return;
+  if (hasStampToday(cardNumber)) {
+    showToast("Limite atteinte : 1 tampon par jour et par carte.");
+    renderStaffCard(card);
+    return;
+  }
 
   card.stampCount += 1;
   card.updatedAt = new Date().toISOString();
