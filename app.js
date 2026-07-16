@@ -154,6 +154,48 @@ function showToast(message) {
   window.setTimeout(() => toast.classList.remove("is-visible"), 2200);
 }
 
+function showMilestoneModal(card, milestone) {
+  let modal = document.querySelector(".gain-modal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.className = "gain-modal";
+    document.body.append(modal);
+  }
+
+  modal.innerHTML = `
+    <section class="gain-dialog" role="dialog" aria-modal="true" aria-labelledby="gain-title">
+      <button class="gain-close" type="button" aria-label="Fermer">×</button>
+      <p class="eyebrow">Gain debloque</p>
+      <div class="gain-value">${milestone.benefit}</div>
+      <h2 id="gain-title">${milestone.label}</h2>
+      <p class="gain-copy">${card.firstName} ${card.lastName} vient d'atteindre le palier ${milestone.stamps} tampons.</p>
+      <dl class="gain-recap">
+        <div>
+          <dt>Carte</dt>
+          <dd>${card.cardNumber}</dd>
+        </div>
+        <div>
+          <dt>Progression</dt>
+          <dd>${card.stampCount}/${STAMP_TARGET} tampons</dd>
+        </div>
+        <div>
+          <dt>Action</dt>
+          <dd>Utiliser l'avantage depuis la fiche client si le client souhaite en profiter maintenant.</dd>
+        </div>
+      </dl>
+      <button class="primary" type="button" id="gain-confirm">Compris</button>
+    </section>
+  `;
+
+  modal.classList.add("is-visible");
+  const close = () => modal.classList.remove("is-visible");
+  modal.querySelector(".gain-close").addEventListener("click", close);
+  modal.querySelector("#gain-confirm").addEventListener("click", close);
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) close();
+  }, { once: true });
+}
+
 function initAuthPage() {
   fillRestaurantSelect(document.querySelector("#restaurant-select"));
   renderStamps(document.querySelector("#sample-stamps"), 0);
@@ -413,13 +455,20 @@ function addStamp(cardNumber) {
     return;
   }
 
+  const previousStampCount = card.stampCount;
   card.stampCount += 1;
   card.updatedAt = new Date().toISOString();
   pushEvent("stamp_added", card, document.querySelector("#staff-restaurant-select").value, "Tampon ajoute", 1);
   saveState();
   renderStaffCard(card);
   renderRestaurantShortlist("recent");
-  showToast(card.stampCount >= STAMP_TARGET ? "Recompense debloquee." : "Tampon ajoute.");
+
+  const unlockedMilestone = MILESTONES.find((milestone) => previousStampCount < milestone.stamps && card.stampCount >= milestone.stamps);
+  if (unlockedMilestone) {
+    showMilestoneModal(card, unlockedMilestone);
+  } else {
+    showToast("Tampon ajoute.");
+  }
 }
 
 function redeemReward(cardNumber) {
