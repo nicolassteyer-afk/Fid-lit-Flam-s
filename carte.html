@@ -4,6 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Ma carte Flam's</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#d8261f" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Flam's" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body data-page="card">
@@ -83,6 +87,8 @@
         </section>
 
         <section class="panel account-panel">
+          <button class="primary" type="button" id="install-app">Installer l'app</button>
+          <p class="install-help" id="install-help">Ajoutez la carte sur l'ecran d'accueil pour y revenir comme une app.</p>
           <button class="secondary" type="button" id="logout-client">Se deconnecter</button>
         </section>
       </aside>

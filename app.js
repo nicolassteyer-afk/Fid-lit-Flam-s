@@ -32,6 +32,20 @@ const initialState = {
 
 const state = loadState();
 const page = document.body.dataset.page;
+let deferredInstallPrompt = null;
+
+window.addEventListener("beforeinstallprompt", (event) => {
+  event.preventDefault();
+  deferredInstallPrompt = event;
+  const installButton = document.querySelector("#install-app");
+  if (installButton) installButton.disabled = false;
+});
+
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("./service-worker.js").catch(() => {});
+  });
+}
 
 function loadState() {
   const stored = localStorage.getItem(STORAGE_KEY);
@@ -295,6 +309,26 @@ function initCardPage() {
   document.querySelector("#logout-client").addEventListener("click", () => {
     sessionStorage.removeItem(SESSION_KEY);
     window.location.href = "index.html";
+  });
+
+  setupInstallButton();
+}
+
+function setupInstallButton() {
+  const installButton = document.querySelector("#install-app");
+  const installHelp = document.querySelector("#install-help");
+  if (!installButton || !installHelp) return;
+
+  installButton.addEventListener("click", async () => {
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      deferredInstallPrompt = null;
+      installHelp.textContent = "Installation lancee. L'app s'ouvrira directement sur la web app Flam's.";
+      return;
+    }
+
+    installHelp.textContent = "Sur iPhone : bouton Partager puis Sur l'ecran d'accueil. Sur Android : menu du navigateur puis Installer l'application.";
   });
 }
 

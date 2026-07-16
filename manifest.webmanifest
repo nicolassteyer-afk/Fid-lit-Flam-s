@@ -1,0 +1,18 @@
+{
+  "name": "Flam's Fidelite",
+  "short_name": "Flam's",
+  "description": "Carte de fidelite digitale Flam's.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fffdf8",
+  "theme_color": "#d8261f",
+  "icons": [
+    {
+      "src": "assets/brand/2025-09-FLAMS-Valise-Logo_LOGO-BDX.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
