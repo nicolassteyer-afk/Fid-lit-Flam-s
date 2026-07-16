@@ -439,21 +439,21 @@ async function downloadClientCard(card) {
   ctx.textAlign = "left";
 
   ctx.fillStyle = "rgba(255,255,255,0.14)";
-  roundRect(ctx, margin, 715, contentWidth, 330, 32);
+  roundRect(ctx, margin, 700, contentWidth, 390, 32);
   ctx.fill();
-  drawCanvasStamps(ctx, card.stampCount, margin + 58, 765, 140, 38, dragonImage);
+  drawCanvasStamps(ctx, card.stampCount, margin + 78, 760, 124, 50, dragonImage);
 
   ctx.fillStyle = "#ffffff";
   const benefit = getAvailableBenefit(card);
   ctx.fillStyle = "rgba(255,255,255,0.14)";
-  roundRect(ctx, margin, 1100, contentWidth, 150, 28);
+  roundRect(ctx, margin, 1135, contentWidth, 150, 28);
   ctx.fill();
   ctx.fillStyle = "rgba(255,255,255,0.76)";
   ctx.font = "800 28px Arial";
-  ctx.fillText("AVANTAGE", margin + 34, 1160);
+  ctx.fillText("AVANTAGE", margin + 34, 1195);
   ctx.fillStyle = "#ffffff";
   ctx.font = "900 46px Arial";
-  fitCanvasText(ctx, benefit ? `${benefit.label} disponible` : "Aucun avantage disponible", margin + 34, 1215, contentWidth - 68, 46, 30);
+  fitCanvasText(ctx, benefit ? `${benefit.label} disponible` : "Aucun avantage disponible", margin + 34, 1250, contentWidth - 68, 46, 30);
 
   ctx.fillStyle = "rgba(255,255,255,0.14)";
   roundRect(ctx, margin, 1300, contentWidth, 120, 24);
@@ -511,6 +511,8 @@ function formatDownloadDate(date) {
 
 function drawCanvasStamps(ctx, stampCount, startX, startY, size, gap, stampImage) {
   for (let index = 0; index < STAMP_TARGET; index += 1) {
+    const stampNumber = index + 1;
+    const milestone = MILESTONES.find((item) => item.stamps === stampNumber);
     const row = Math.floor(index / 5);
     const col = index % 5;
     const x = startX + col * (size + gap);
@@ -527,6 +529,25 @@ function drawCanvasStamps(ctx, stampCount, startX, startY, size, gap, stampImage
     if (index < stampCount) {
       const imageSize = size * 0.76;
       ctx.drawImage(stampImage, x + (size - imageSize) / 2, y + (size - imageSize) / 2, imageSize, imageSize);
+    }
+    if (milestone) {
+      const badgeWidth = 72;
+      const badgeHeight = 34;
+      const badgeX = x + size - badgeWidth + 10;
+      const badgeY = y - 10;
+      ctx.fillStyle = "#d8261f";
+      roundRect(ctx, badgeX, badgeY, badgeWidth, badgeHeight, 17);
+      ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,0.92)";
+      ctx.lineWidth = 4;
+      ctx.stroke();
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "900 20px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(milestone.benefit, badgeX + badgeWidth / 2, badgeY + badgeHeight / 2 + 1);
+      ctx.textAlign = "left";
+      ctx.textBaseline = "alphabetic";
     }
   }
 }
