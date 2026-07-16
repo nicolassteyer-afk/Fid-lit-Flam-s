@@ -122,60 +122,6 @@ function hasStampToday(cardNumber) {
   });
 }
 
-function hashCardNumber(value) {
-  return [...value].reduce((hash, char) => {
-    return (hash * 31 + char.charCodeAt(0)) >>> 0;
-  }, 2166136261);
-}
-
-function renderCardArt(container, cardNumber) {
-  if (!container) return;
-  const hash = hashCardNumber(cardNumber);
-  const colors = [
-    ["#d8261f", "#f0b323", "#1b7f55"],
-    ["#d8261f", "#2f7f95", "#f0b323"],
-    ["#211f1c", "#d8261f", "#f0b323"],
-    ["#9b1c31", "#f0b323", "#2f7f95"],
-  ];
-  const palette = colors[hash % colors.length];
-
-  container.innerHTML = "";
-  container.style.setProperty("--art-primary", palette[0]);
-  container.style.setProperty("--art-secondary", palette[1]);
-  container.style.setProperty("--art-accent", palette[2]);
-  container.style.setProperty("--art-x", `${10 + (hash % 36)}%`);
-  container.style.setProperty("--art-y", `${8 + ((hash >> 4) % 34)}%`);
-  container.style.setProperty("--art-tilt", `${-28 + (hash % 56)}deg`);
-
-  for (let index = 0; index < 5; index += 1) {
-    const line = document.createElement("span");
-    line.className = "art-line";
-    line.style.setProperty("--line-left", `${8 + ((hash >> (index + 1)) % 42)}%`);
-    line.style.setProperty("--line-top", `${18 + index * 14}%`);
-    line.style.setProperty("--line-width", `${32 + ((hash >> (index + 3)) % 38)}%`);
-    line.style.setProperty("--line-tilt", `${-18 + ((hash >> (index + 5)) % 36)}deg`);
-    container.append(line);
-  }
-
-  for (let index = 0; index < 7; index += 1) {
-    const dot = document.createElement("span");
-    dot.className = "art-dot";
-    dot.style.setProperty("--dot-left", `${8 + ((hash >> (index + 2)) % 78)}%`);
-    dot.style.setProperty("--dot-top", `${10 + ((hash >> (index + 6)) % 72)}%`);
-    dot.style.setProperty("--dot-size", `${8 + ((hash >> (index + 4)) % 18)}px`);
-    container.append(dot);
-  }
-
-  for (let index = 0; index < 3; index += 1) {
-    const ring = document.createElement("span");
-    ring.className = "art-ring";
-    ring.style.setProperty("--ring-left", `${12 + ((hash >> (index + 8)) % 68)}%`);
-    ring.style.setProperty("--ring-top", `${12 + ((hash >> (index + 11)) % 62)}%`);
-    ring.style.setProperty("--ring-size", `${24 + ((hash >> (index + 7)) % 38)}px`);
-    container.append(ring);
-  }
-}
-
 function renderEventItem(event) {
   const item = document.createElement("article");
   item.className = "event";
@@ -211,7 +157,6 @@ function showToast(message) {
 function initAuthPage() {
   fillRestaurantSelect(document.querySelector("#restaurant-select"));
   renderStamps(document.querySelector("#sample-stamps"), 0);
-  renderCardArt(document.querySelector("#sample-art"), "FLAMS-000000");
 
   document.querySelector("#customer-form").addEventListener("submit", (event) => {
     event.preventDefault();
@@ -310,7 +255,6 @@ function renderClientCard(card) {
   document.querySelector("#metric-my-stamps").textContent = card.stampCount;
   document.querySelector("#metric-my-rewards").textContent = card.rewardsRedeemed;
   renderStamps(document.querySelector("#client-stamps"), card.stampCount);
-  renderCardArt(document.querySelector("#card-art"), card.cardNumber);
   renderMilestones(document.querySelector("#milestone-track"), card.stampCount);
   renderBenefitList(document.querySelector("#benefit-list"), card);
 

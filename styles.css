@@ -340,27 +340,42 @@ select {
 
 .stamp-grid {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   grid-template-columns: repeat(5, 1fr);
 }
 
 .client-stamps {
-  gap: clamp(6px, 1.8vw, 10px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 16px;
+  gap: clamp(8px, 2vw, 12px);
+  padding: 14px;
 }
 
 .stamp {
   aspect-ratio: 1;
-  background: rgba(255, 248, 232, 0.32);
-  border: 2px dashed rgba(97, 24, 30, 0.4);
+  align-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 2px dashed rgba(255, 255, 255, 0.36);
   border-radius: 50%;
+  display: flex;
+  justify-content: center;
   min-width: 0;
   position: relative;
 }
 
 .stamp.is-filled {
-  background: rgba(240, 179, 35, 0.94);
-  border-color: rgba(97, 24, 30, 0.78);
-  box-shadow: inset 0 0 0 5px rgba(255, 248, 232, 0.35), 0 4px 10px rgba(33, 31, 28, 0.18);
+  background: #fff8e8;
+  border-color: var(--gold);
+  box-shadow: 0 4px 10px rgba(33, 31, 28, 0.18);
+}
+
+.stamp.is-filled::before {
+  background: url("assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-DRAGON-JAUNE.svg") center / contain no-repeat;
+  content: "";
+  display: block;
+  height: 78%;
+  width: 78%;
 }
 
 .stamp.is-milestone {
@@ -385,85 +400,6 @@ select {
   width: 34px;
 }
 
-.card-art {
-  align-items: center;
-  background:
-    radial-gradient(circle at var(--art-x, 22%) 18%, color-mix(in srgb, var(--art-primary, #d8261f) 82%, white) 0 19%, transparent 20%),
-    radial-gradient(circle at 82% var(--art-y, 72%), var(--art-secondary, #f0b323) 0 24%, transparent 25%),
-    linear-gradient(135deg, #fff8e8 0%, #fffdf8 54%, #f6eadb 100%);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  border-radius: 18px;
-  color: var(--ink);
-  display: flex;
-  justify-content: center;
-  min-height: 170px;
-  overflow: hidden;
-  position: relative;
-}
-
-.card-art::before,
-.card-art::after {
-  border-radius: 999px;
-  content: "";
-  position: absolute;
-}
-
-.card-art::before {
-  background: color-mix(in srgb, var(--art-primary, #d8261f) 88%, white);
-  filter: blur(0);
-  height: 210px;
-  left: calc(var(--art-x, 18%) - 12%);
-  opacity: 0.9;
-  top: -62px;
-  transform: rotate(var(--art-tilt, -18deg));
-  width: 92px;
-}
-
-.card-art::after {
-  background: var(--art-secondary, #f0b323);
-  bottom: -50px;
-  height: 150px;
-  opacity: 0.86;
-  right: var(--art-y, 14%);
-  width: 150px;
-}
-
-.art-line {
-  background: var(--ink);
-  border-radius: 999px;
-  height: 7px;
-  left: var(--line-left);
-  opacity: 0.92;
-  position: absolute;
-  top: var(--line-top);
-  transform: rotate(var(--line-tilt));
-  width: var(--line-width);
-  z-index: 1;
-}
-
-.art-dot {
-  background: var(--art-accent, #1b7f55);
-  border-radius: 50%;
-  height: var(--dot-size);
-  left: var(--dot-left);
-  opacity: 0.95;
-  position: absolute;
-  top: var(--dot-top);
-  width: var(--dot-size);
-  z-index: 1;
-}
-
-.art-ring {
-  border: 3px solid var(--art-accent, #1b7f55);
-  border-radius: 50%;
-  height: var(--ring-size);
-  left: var(--ring-left);
-  opacity: 0.9;
-  position: absolute;
-  top: var(--ring-top);
-  width: var(--ring-size);
-  z-index: 1;
-}
 
 .wallet-actions {
   gap: 10px;
