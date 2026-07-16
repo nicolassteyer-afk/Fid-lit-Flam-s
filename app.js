@@ -611,10 +611,166 @@ function renderAdmin() {
   document.querySelector("#metric-rewards").textContent = rewardEvents.length;
   document.querySelector("#metric-optin").textContent = `${optinRate}%`;
 
+  renderDashboardCharts();
   renderRestaurantTable();
   renderClientTable();
   renderEventList();
   renderSettings();
+}
+
+function renderDashboardCharts() {
+  renderActivityChart();
+  renderRestaurantBars();
+  renderStatusChart();
+  renderMilestoneFunnel();
+  renderAdminInsights();
+}
+
+function getDayKey(date) {
+  return date.toISOString().slice(0, 10);
+}
+
+function renderActivityChart() {
+  const container = document.querySelector("#activity-chart");
+  const total = document.querySelector("#activity-total");
+  if (!container || !total) return;
+
+  const days = Array.from({ length: 7 }, (_, index) => {
+    const date = new Date();
+    date.setDate(date.getDate() - (6 - index));
+    return {
+      key: getDayKey(date),
+      label: date.toLocaleDateString("fr-FR", { weekday: "short" }),
+      stamps: 0,
+      rewards: 0,
+    };
+  });
+
+  for (const event of state.events) {
+    const day = days.find((item) => item.key === event.createdAt.slice(0, 10));
+    if (!day) continue;
+    if (event.type === "stamp_added") day.stamps += 1;
+    if (event.type === "reward_redeemed") day.rewards += 1;
+  }
+
+  const max = Math.max(1, ...days.map((day) => day.stamps + day.rewards));
+  total.textContent = `${days.reduce((sum, day) => sum + day.stamps + day.rewards, 0)} actions`;
+  container.innerHTML = "";
+
+  for (const day of days) {
+    const value = day.stamps + day.rewards;
+    const column = document.createElement("article");
+    column.className = "line-day";
+    column.innerHTML = `
+      <div class="line-stack" style="--height:${Math.max(8, (value / max) * 100)}%">
+        <span class="line-rewards" style="--share:${value ? (day.rewards / value) * 100 : 0}%"></span>
+      </div>
+      <strong>${value}</strong>
+      <span>${day.label}</span>
+    `;
+    container.append(column);
+  }
+}
+
+function renderRestaurantBars() {
+  const container = document.querySelector("#restaurant-bars");
+  if (!container) return;
+
+  const rows = restaurants.map((restaurant) => {
+    const events = state.events.filter((event) => event.restaurantId === restaurant.id && event.type === "stamp_added");
+    return { restaurant, value: events.length };
+  });
+  const max = Math.max(1, ...rows.map((row) => row.value));
+  container.innerHTML = "";
+
+  for (const row of rows) {
+    const item = document.createElement("article");
+    item.className = "bar-row";
+    item.innerHTML = `
+      <div>
+        <strong>${row.restaurant.name}</strong>
+        <span>${row.restaurant.city}</span>
+      </div>
+      <div class="bar-track"><span style="width:${(row.value / max) * 100}%"></span></div>
+      <strong>${row.value}</strong>
+    `;
+    container.append(item);
+  }
+}
+
+function renderStatusChart() {
+  const container = document.querySelector("#status-chart");
+  if (!container) return;
+
+  const levels = [...STATUS_LEVELS].reverse();
+  container.innerHTML = "";
+  for (const level of levels) {
+    const count = state.cards.filter((card) => getCustomerStatus(card).key === level.key).length;
+    const item = document.createElement("article");
+    item.className = `status-chip status-${level.key}`;
+    item.innerHTML = `<strong>${count}</strong><span>${level.label}</span>`;
+    container.append(item);
+  }
+}
+
+function renderMilestoneFunnel() {
+  const container = document.querySelector("#milestone-funnel");
+  if (!container) return;
+
+  const rows = [
+    { label: "Cartes actives", value: state.cards.length },
+    ...MILESTONES.map((milestone) => ({
+      label: `${milestone.label} atteint`,
+      value: state.cards.filter((card) => card.stampCount >= milestone.stamps).length,
+    })),
+  ];
+  const max = Math.max(1, ...rows.map((row) => row.value));
+  container.innerHTML = "";
+
+  for (const row of rows) {
+    const item = document.createElement("article");
+    item.className = "funnel-row";
+    item.innerHTML = `
+      <div class="funnel-label">
+        <strong>${row.label}</strong>
+        <span>${row.value} carte${row.value > 1 ? "s" : ""}</span>
+      </div>
+      <div class="funnel-track"><span style="width:${(row.value / max) * 100}%"></span></div>
+    `;
+    container.append(item);
+  }
+}
+
+function renderAdminInsights() {
+  const container = document.querySelector("#admin-insights");
+  if (!container) return;
+
+  const stampEvents = state.events.filter((event) => event.type === "stamp_added");
+  const rewardEvents = state.events.filter((event) => event.type === "reward_redeemed");
+  const activeCards = state.cards.filter((card) => card.stampCount > 0).length;
+  const nearReward = state.cards.filter((card) => card.stampCount >= 7).length;
+  const bestRestaurant = restaurants
+    .map((restaurant) => ({
+      name: restaurant.name,
+      stamps: stampEvents.filter((event) => event.restaurantId === restaurant.id).length,
+    }))
+    .sort((a, b) => b.stamps - a.stamps)[0];
+  const rewardRate = stampEvents.length ? Math.round((rewardEvents.length / stampEvents.length) * 100) : 0;
+
+  const insights = [
+    { label: "Cartes actives", value: activeCards, detail: "clients avec au moins 1 tampon" },
+    { label: "Proches d'un gain", value: nearReward, detail: "cartes a 7 tampons ou plus" },
+    { label: "Top restaurant", value: bestRestaurant?.stamps || 0, detail: bestRestaurant?.name || "Aucune activite" },
+    { label: "Taux recompense", value: `${rewardRate}%`, detail: "recompenses / tampons" },
+  ];
+
+  container.innerHTML = "";
+  for (const insight of insights) {
+    const item = document.createElement("article");
+    item.className = "insight-card";
+    item.innerHTML = `<span>${insight.label}</span><strong>${insight.value}</strong><p>${insight.detail}</p>`;
+    container.append(item);
+  }
 }
 
 function renderSettings() {
