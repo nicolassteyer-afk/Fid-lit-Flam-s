@@ -19,8 +19,8 @@
       </nav>
     </header>
 
-    <main class="page-grid client-page">
-      <section class="phone-preview" aria-live="polite">
+    <main class="client-shell">
+      <section class="client-card-area" aria-live="polite">
         <div class="client-stack">
           <div class="wallet-card">
             <div class="brand-row">
@@ -31,13 +31,16 @@
               </div>
               <span class="logo-mark">F</span>
             </div>
-            <div class="stamp-grid" id="client-stamps"></div>
+
+            <div class="client-reward-banner" id="client-current-benefit">Aucun avantage actif</div>
+
+            <div class="stamp-grid client-stamps" id="client-stamps"></div>
             <div class="reward-row">
               <span id="reward-status">Encore 10 tampons avant la recompense</span>
               <strong id="stamp-count">0/10</strong>
             </div>
             <div class="progress-track"><span id="client-progress"></span></div>
-            <div class="card-art" id="card-art" aria-label="Dessin unique de la carte"></div>
+            <div class="milestone-track" id="milestone-track" aria-label="Paliers de fidelite"></div>
             <div class="wallet-actions">
               <button type="button" class="secondary" id="copy-card-code">Copier le code</button>
               <button type="button" class="secondary" disabled>Wallet bientot</button>
@@ -46,24 +49,37 @@
         </div>
       </section>
 
-      <aside class="panel">
-        <p class="eyebrow">Espace client</p>
-        <h2>Mon activite</h2>
+      <aside class="client-side">
+        <section class="panel">
+          <p class="eyebrow">Espace client</p>
+          <h2>Mon activite</h2>
         <div class="metrics mini-metrics">
           <article>
             <span>Tampons</span>
             <strong id="metric-my-stamps">0</strong>
           </article>
           <article>
-            <span>Recompenses</span>
+            <span>Avantages utilises</span>
             <strong id="metric-my-rewards">0</strong>
           </article>
         </div>
-        <div class="divider"></div>
-        <h2>Historique</h2>
-        <div class="event-list compact" id="client-history"></div>
-        <div class="divider"></div>
-        <button class="secondary" type="button" id="logout-client">Se deconnecter</button>
+        </section>
+
+        <section class="panel">
+          <p class="eyebrow">Paliers</p>
+          <h2>Mes avantages</h2>
+          <div class="benefit-list" id="benefit-list"></div>
+        </section>
+
+        <section class="panel">
+          <p class="eyebrow">Historique</p>
+          <h2>Dernieres actions</h2>
+          <div class="event-list compact" id="client-history"></div>
+        </section>
+
+        <section class="panel account-panel">
+          <button class="secondary" type="button" id="logout-client">Se deconnecter</button>
+        </section>
       </aside>
     </main>
 

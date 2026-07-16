@@ -57,9 +57,11 @@ Permettre aux clients Flam's de posseder une carte de fidelite digitale, de la p
 Version simple pour le lancement :
 
 - 1 achat en restaurant = 1 tampon.
-- 10 tampons = 1 recompense.
-- Une recompense peut etre marquee comme utilisee par l'equipe.
-- Apres utilisation, une nouvelle carte repart a 0 tampon.
+- 4 tampons = 5% de remise.
+- 7 tampons = 10% de remise.
+- 10 tampons = 20% de remise.
+- Chaque avantage peut etre marque comme utilise par l'equipe.
+- Apres utilisation du palier final de 20%, une nouvelle carte repart a 0 tampon.
 
 La recompense exacte reste a definir par Flam's : flammekueche offerte, dessert offert, boisson offerte, remise, menu, etc.
 
@@ -197,6 +199,14 @@ Priorite :
 2. `carte.html` : carte digitale client apres connexion.
 3. `restaurant.html` : recherche, tamponnage et recompense.
 4. `admin.html` : statistiques, restaurants, clients et export CSV.
+
+## Assets de marque
+
+Les visuels Flam's peuvent etre ajoutes dans :
+
+`assets/brand/`
+
+Ce dossier est prevu pour les logos, SVG, PNG, fonds de carte, motifs, icones ou photos qui seront ensuite integres dans l'application.
 
 ## Etat technique V1
 

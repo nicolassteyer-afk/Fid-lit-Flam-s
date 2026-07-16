@@ -1,6 +1,11 @@
 const STAMP_TARGET = 10;
 const STORAGE_KEY = "flams-loyalty-v3";
 const SESSION_KEY = "flams-current-client";
+const MILESTONES = [
+  { stamps: 4, benefit: "5%", label: "5% de remise" },
+  { stamps: 7, benefit: "10%", label: "10% de remise" },
+  { stamps: 10, benefit: "20%", label: "20% de remise" },
+];
 
 const restaurants = [
   { id: "strasbourg", name: "Flam's Strasbourg", city: "Strasbourg" },
@@ -97,8 +102,11 @@ function renderStamps(container, stampCount) {
   if (!container) return;
   container.innerHTML = "";
   for (let index = 0; index < STAMP_TARGET; index += 1) {
+    const stampNumber = index + 1;
+    const milestone = MILESTONES.find((item) => item.stamps === stampNumber);
     const stamp = document.createElement("span");
-    stamp.className = `stamp${index < stampCount ? " is-filled" : ""}`;
+    stamp.className = `stamp${index < stampCount ? " is-filled" : ""}${milestone ? " is-milestone" : ""}`;
+    if (milestone) stamp.dataset.benefit = milestone.benefit;
     container.append(stamp);
   }
 }
@@ -209,6 +217,7 @@ function initAuthPage() {
       marketingConsent: formData.get("marketingConsent") === "on",
       stampCount: 0,
       rewardsRedeemed: 0,
+      redeemedMilestones: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
@@ -263,15 +272,26 @@ function initCardPage() {
 
 function renderClientCard(card) {
   const remaining = STAMP_TARGET - card.stampCount;
+  const nextMilestone = getNextMilestone(card.stampCount);
+  const currentBenefit = getCurrentBenefit(card.stampCount);
+  const availableBenefit = getAvailableBenefit(card);
   document.querySelector("#card-name").textContent = `${card.firstName} ${card.lastName}`;
   document.querySelector("#card-number").textContent = card.cardNumber;
   document.querySelector("#stamp-count").textContent = `${card.stampCount}/${STAMP_TARGET}`;
-  document.querySelector("#reward-status").textContent = remaining <= 0 ? "Recompense disponible" : `Encore ${remaining} tampon${remaining > 1 ? "s" : ""}`;
+  document.querySelector("#reward-status").textContent = nextMilestone
+    ? `Encore ${nextMilestone.stamps - card.stampCount} tampon${nextMilestone.stamps - card.stampCount > 1 ? "s" : ""} avant ${nextMilestone.label}`
+    : "20% disponible";
+  document.querySelector("#client-current-benefit").textContent = availableBenefit
+    ? `${availableBenefit.label} disponible`
+    : currentBenefit
+      ? "Tous les avantages debloques ont ete utilises"
+      : "Prochain palier : 5% au 4eme tampon";
   document.querySelector("#client-progress").style.width = `${(card.stampCount / STAMP_TARGET) * 100}%`;
   document.querySelector("#metric-my-stamps").textContent = card.stampCount;
   document.querySelector("#metric-my-rewards").textContent = card.rewardsRedeemed;
   renderStamps(document.querySelector("#client-stamps"), card.stampCount);
-  renderCardArt(document.querySelector("#card-art"), card.cardNumber);
+  renderMilestones(document.querySelector("#milestone-track"), card.stampCount);
+  renderBenefitList(document.querySelector("#benefit-list"), card);
 
   const history = document.querySelector("#client-history");
   history.innerHTML = "";
@@ -281,6 +301,57 @@ function renderClientCard(card) {
     return;
   }
   for (const event of events) history.append(renderEventItem(event));
+}
+
+function getCurrentBenefit(stampCount) {
+  return [...MILESTONES].reverse().find((milestone) => stampCount >= milestone.stamps);
+}
+
+function getNextMilestone(stampCount) {
+  return MILESTONES.find((milestone) => stampCount < milestone.stamps);
+}
+
+function getAvailableBenefit(card) {
+  const redeemed = card.redeemedMilestones || [];
+  return MILESTONES.find((milestone) => card.stampCount >= milestone.stamps && !redeemed.includes(milestone.stamps));
+}
+
+function renderMilestones(container, stampCount) {
+  container.innerHTML = "";
+  for (const milestone of MILESTONES) {
+    const unlocked = stampCount >= milestone.stamps;
+    const next = getNextMilestone(stampCount)?.stamps === milestone.stamps;
+    const item = document.createElement("article");
+    item.className = `milestone-item${unlocked ? " is-unlocked" : ""}${next ? " is-current" : ""}`;
+    item.innerHTML = `
+      <span class="milestone-dot">${milestone.stamps}</span>
+      <span class="milestone-copy">
+        <strong>${milestone.label}</strong>
+        <span>Palier ${milestone.stamps} tampons</span>
+      </span>
+      <span class="milestone-state">${unlocked ? "Dispo" : `${milestone.stamps - stampCount} restants`}</span>
+    `;
+    container.append(item);
+  }
+}
+
+function renderBenefitList(container, card) {
+  container.innerHTML = "";
+  for (const milestone of MILESTONES) {
+    const unlocked = card.stampCount >= milestone.stamps;
+    const redeemed = (card.redeemedMilestones || []).includes(milestone.stamps);
+    const item = document.createElement("article");
+    item.className = `benefit-item${unlocked && !redeemed ? " is-unlocked" : ""}`;
+    item.innerHTML = `
+      <span class="benefit-value">${milestone.benefit}</span>
+      <span class="benefit-copy">
+        <strong>${milestone.label}</strong>
+        <span>Debloque au ${milestone.stamps}eme tampon</span>
+      </span>
+      <span class="pill ${unlocked && !redeemed ? "good" : ""}">${redeemed ? "Utilise" : unlocked ? "Disponible" : "Bloque"}</span>
+    `;
+    container.append(item);
+  }
 }
 
 function initRestaurantPage() {
@@ -317,6 +388,8 @@ function renderStaffCard(card) {
 
   const remaining = STAMP_TARGET - card.stampCount;
   const rewardReady = remaining <= 0;
+  const currentBenefit = getCurrentBenefit(card.stampCount);
+  const availableBenefit = getAvailableBenefit(card);
   const restaurant = getRestaurant(card.restaurantId);
   const lastEvent = state.events.find((event) => event.cardNumber === card.cardNumber);
 
@@ -328,7 +401,7 @@ function renderStaffCard(card) {
           <h2>${card.firstName} ${card.lastName}</h2>
           <p class="customer-line">${card.email} - ${card.phone}</p>
         </div>
-        <span class="pill ${rewardReady ? "good" : "warn"}">${rewardReady ? "Recompense" : `${remaining} restants`}</span>
+        <span class="pill ${availableBenefit ? "good" : "warn"}">${availableBenefit ? availableBenefit.label : `${remaining} restants`}</span>
       </div>
       <div class="mini-stats">
         <span class="pill">${restaurant?.city || "Reseau"}</span>
@@ -338,7 +411,7 @@ function renderStaffCard(card) {
       <div class="stamp-grid" id="staff-stamps"></div>
       <div class="staff-actions">
         <button class="primary" type="button" id="add-stamp" ${rewardReady ? "disabled" : ""}>Ajouter un tampon</button>
-        <button class="secondary" type="button" id="redeem-reward" ${rewardReady ? "" : "disabled"}>Utiliser la recompense</button>
+        <button class="secondary" type="button" id="redeem-reward" ${availableBenefit ? "" : "disabled"}>Utiliser l'avantage</button>
       </div>
       <div>
         <h3>Historique carte</h3>
@@ -379,16 +452,23 @@ function addStamp(cardNumber) {
 
 function redeemReward(cardNumber) {
   const card = state.cards.find((item) => item.cardNumber === cardNumber);
-  if (!card || card.stampCount < STAMP_TARGET) return;
+  const benefit = card ? getAvailableBenefit(card) : null;
+  if (!card || !benefit) return;
 
-  card.stampCount = 0;
+  const isFinalBenefit = benefit.stamps >= STAMP_TARGET;
+  card.redeemedMilestones = card.redeemedMilestones || [];
+  card.redeemedMilestones.push(benefit.stamps);
+  if (isFinalBenefit) {
+    card.stampCount = 0;
+    card.redeemedMilestones = [];
+  }
   card.rewardsRedeemed += 1;
   card.updatedAt = new Date().toISOString();
-  pushEvent("reward_redeemed", card, document.querySelector("#staff-restaurant-select").value, "Recompense utilisee", -STAMP_TARGET);
+  pushEvent("reward_redeemed", card, document.querySelector("#staff-restaurant-select").value, `${benefit.label} utilisee`, isFinalBenefit ? -STAMP_TARGET : 0);
   saveState();
   renderStaffCard(card);
   renderRestaurantShortlist("recent");
-  showToast("Recompense utilisee, carte remise a zero.");
+  showToast(isFinalBenefit ? "20% utilise, carte remise a zero." : "Avantage intermediaire utilise.");
 }
 
 function renderRestaurantShortlist(mode) {
@@ -481,7 +561,7 @@ function renderClientTable() {
       <td>${card.cardNumber}</td>
       <td>${card.stampCount}/${STAMP_TARGET}</td>
       <td>${restaurant?.name || "Reseau"}</td>
-      <td><span class="pill ${card.stampCount >= STAMP_TARGET ? "good" : ""}">${card.stampCount >= STAMP_TARGET ? "Recompense" : "Active"}</span></td>
+      <td><span class="pill ${getAvailableBenefit(card) ? "good" : ""}">${getAvailableBenefit(card)?.label || "Active"}</span></td>
     `;
     body.append(row);
   }
@@ -545,6 +625,7 @@ function seedDemoData() {
       marketingConsent,
       stampCount,
       rewardsRedeemed,
+      redeemedMilestones: [],
       createdAt: new Date(Date.now() - Math.random() * 86400000 * 20).toISOString(),
       updatedAt: new Date(Date.now() - Math.random() * 86400000 * 3).toISOString(),
     };
