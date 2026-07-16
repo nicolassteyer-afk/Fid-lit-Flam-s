@@ -375,10 +375,14 @@ async function downloadClientCard(card) {
   const canvas = document.createElement("canvas");
   const width = 1080;
   const height = 1600;
+  const margin = 72;
+  const contentWidth = width - margin * 2;
   canvas.width = width;
   canvas.height = height;
   const ctx = canvas.getContext("2d");
   const downloadedAt = new Date();
+  const logoImage = await loadImage("assets/brand/2025-09-FLAMS-Valise-Logo_LOGO-BDX.svg");
+  const dragonImage = await loadImage("assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-DRAGON-JAUNE.svg");
   const gradient = ctx.createLinearGradient(0, 0, width, height);
   const colors = getStatusCanvasColors(status.key);
   gradient.addColorStop(0, colors[0]);
@@ -389,60 +393,82 @@ async function downloadClientCard(card) {
   roundRect(ctx, 0, 0, width, height, 64);
   ctx.fill();
 
-  ctx.fillStyle = "rgba(255,255,255,0.92)";
-  roundRect(ctx, 70, 70, 260, 120, 18);
+  ctx.fillStyle = "rgba(255,255,255,0.08)";
+  roundRect(ctx, margin, margin, contentWidth, height - margin * 2, 42);
   ctx.fill();
-  ctx.fillStyle = "#d8261f";
-  ctx.font = "900 58px Arial";
-  ctx.fillText("FLAM'S", 95, 148);
+
+  ctx.fillStyle = "rgba(255,255,255,0.92)";
+  roundRect(ctx, margin, 72, 250, 118, 18);
+  ctx.fill();
+  drawContainedImage(ctx, logoImage, margin + 28, 98, 194, 66);
 
   ctx.fillStyle = "#f0b323";
-  ctx.font = "800 34px Arial";
-  ctx.fillText("CARTE FIDELITE", 70, 260);
+  ctx.font = "800 30px Arial";
+  ctx.textAlign = "right";
+  ctx.fillText("CARTE FIDELITE", width - margin, 128);
+  ctx.fillStyle = "rgba(255,255,255,0.76)";
+  ctx.font = "700 26px Arial";
+  ctx.fillText(`Telechargee le ${formatDownloadDate(downloadedAt)}`, width - margin, 168);
+  ctx.textAlign = "left";
 
   ctx.fillStyle = "#ffffff";
-  ctx.font = "900 76px Arial";
-  wrapCanvasText(ctx, `${card.firstName} ${card.lastName}`, 70, 350, 900, 86);
+  ctx.font = "900 70px Arial";
+  const nameBottom = wrapCanvasText(ctx, `${card.firstName} ${card.lastName}`, margin, 300, contentWidth, 78, 2);
 
   ctx.fillStyle = "rgba(255,255,255,0.76)";
   ctx.font = "700 34px Courier New";
-  ctx.fillText(card.cardNumber, 70, 470);
+  ctx.fillText(card.cardNumber, margin, nameBottom + 50);
 
   ctx.fillStyle = "rgba(255,255,255,0.14)";
-  roundRect(ctx, 70, 540, 940, 135, 28);
+  roundRect(ctx, margin, 520, contentWidth, 140, 28);
   ctx.fill();
   ctx.fillStyle = "rgba(255,255,255,0.78)";
-  ctx.font = "800 30px Arial";
-  ctx.fillText("STATUT", 105, 595);
+  ctx.font = "800 28px Arial";
+  ctx.fillText("STATUT", margin + 34, 578);
   ctx.fillStyle = "#ffffff";
-  ctx.font = "900 48px Arial";
-  ctx.fillText(status.label, 105, 650);
+  ctx.font = "900 50px Arial";
+  ctx.fillText(status.label, margin + 34, 632);
+
+  ctx.textAlign = "right";
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "900 50px Arial";
+  ctx.fillText(`${card.stampCount}/${STAMP_TARGET}`, width - margin - 34, 600);
+  ctx.fillStyle = "rgba(255,255,255,0.74)";
+  ctx.font = "800 24px Arial";
+  ctx.fillText("TAMPONS", width - margin - 34, 634);
+  ctx.textAlign = "left";
 
   ctx.fillStyle = "rgba(255,255,255,0.14)";
-  roundRect(ctx, 70, 725, 940, 360, 32);
+  roundRect(ctx, margin, 715, contentWidth, 330, 32);
   ctx.fill();
-  const dragonImage = await loadImage("assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-DRAGON-JAUNE.svg");
-  drawCanvasStamps(ctx, card.stampCount, 110, 765, 160, 32, dragonImage);
+  drawCanvasStamps(ctx, card.stampCount, margin + 58, 765, 140, 38, dragonImage);
 
   ctx.fillStyle = "#ffffff";
-  ctx.font = "900 56px Arial";
-  ctx.fillText(`${card.stampCount}/${STAMP_TARGET} tampons`, 70, 1180);
-
   const benefit = getAvailableBenefit(card);
-  ctx.fillStyle = "rgba(255,255,255,0.78)";
-  ctx.font = "700 34px Arial";
-  ctx.fillText(benefit ? `${benefit.label} disponible` : "Aucun avantage disponible", 70, 1245);
+  ctx.fillStyle = "rgba(255,255,255,0.14)";
+  roundRect(ctx, margin, 1100, contentWidth, 150, 28);
+  ctx.fill();
+  ctx.fillStyle = "rgba(255,255,255,0.76)";
+  ctx.font = "800 28px Arial";
+  ctx.fillText("AVANTAGE", margin + 34, 1160);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "900 46px Arial";
+  fitCanvasText(ctx, benefit ? `${benefit.label} disponible` : "Aucun avantage disponible", margin + 34, 1215, contentWidth - 68, 46, 30);
 
   ctx.fillStyle = "rgba(255,255,255,0.14)";
-  roundRect(ctx, 70, 1320, 940, 120, 24);
+  roundRect(ctx, margin, 1300, contentWidth, 120, 24);
   ctx.fill();
   ctx.fillStyle = "#ffffff";
-  ctx.font = "900 44px Courier New";
-  ctx.fillText(card.cardNumber, 105, 1395);
+  ctx.font = "900 42px Courier New";
+  ctx.textAlign = "center";
+  ctx.fillText(card.cardNumber, width / 2, 1375);
+  ctx.textAlign = "left";
 
   ctx.fillStyle = "rgba(255,255,255,0.72)";
-  ctx.font = "700 28px Arial";
-  ctx.fillText(`Telechargee le ${downloadedAt.toLocaleDateString("fr-FR")} a ${downloadedAt.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}`, 70, 1510);
+  ctx.font = "700 26px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText("Presentez cette carte en restaurant Flam's", width / 2, 1495);
+  ctx.textAlign = "left";
 
   const link = document.createElement("a");
   link.download = `carte-flams-${card.cardNumber}.png`;
@@ -470,6 +496,17 @@ function loadImage(src) {
     image.onerror = reject;
     image.src = src;
   });
+}
+
+function drawContainedImage(ctx, image, x, y, width, height) {
+  const ratio = Math.min(width / image.width, height / image.height);
+  const drawWidth = image.width * ratio;
+  const drawHeight = image.height * ratio;
+  ctx.drawImage(image, x + (width - drawWidth) / 2, y + (height - drawHeight) / 2, drawWidth, drawHeight);
+}
+
+function formatDownloadDate(date) {
+  return `${date.toLocaleDateString("fr-FR")} ${date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}`;
 }
 
 function drawCanvasStamps(ctx, stampCount, startX, startY, size, gap, stampImage) {
@@ -508,14 +545,27 @@ function roundRect(ctx, x, y, width, height, radius) {
   ctx.closePath();
 }
 
-function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
+function fitCanvasText(ctx, text, x, y, maxWidth, startSize, minSize) {
+  let size = startSize;
+  while (size > minSize) {
+    ctx.font = `900 ${size}px Arial`;
+    if (ctx.measureText(text).width <= maxWidth) break;
+    size -= 2;
+  }
+  ctx.fillText(text, x, y);
+}
+
+function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 3) {
   const words = text.split(" ");
   let line = "";
   let currentY = y;
+  let lines = 0;
   for (const word of words) {
     const testLine = line ? `${line} ${word}` : word;
     if (ctx.measureText(testLine).width > maxWidth && line) {
       ctx.fillText(line, x, currentY);
+      lines += 1;
+      if (lines >= maxLines) return currentY;
       line = word;
       currentY += lineHeight;
     } else {
@@ -523,6 +573,7 @@ function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
     }
   }
   ctx.fillText(line, x, currentY);
+  return currentY;
 }
 
 function getCurrentBenefit(stampCount) {
