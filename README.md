@@ -64,6 +64,18 @@ Version simple pour le lancement :
 - Apres utilisation du palier final de 20%, une nouvelle carte repart a 0 tampon.
 - Une carte ne peut recevoir qu'un seul tampon par jour.
 
+## Statuts client
+
+Le statut client evolue selon le nombre de cartes completees, c'est-a-dire apres utilisation du palier final de 20% :
+
+- 1 carte completee = Bronze.
+- 2 cartes completees = Argent.
+- 3 cartes completees = Or.
+- 4 cartes completees = Platine.
+- 5 cartes completees et plus = Diamant.
+
+La carte digitale client change de couleur selon ce statut.
+
 La recompense exacte reste a definir par Flam's : flammekueche offerte, dessert offert, boisson offerte, remise, menu, etc.
 
 ## Parcours client

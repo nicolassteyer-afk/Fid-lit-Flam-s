@@ -270,6 +270,30 @@ select {
   width: 100%;
 }
 
+.wallet-card.status-new {
+  background: linear-gradient(160deg, #211f1c 0%, #3a332a 58%, #d8261f 132%);
+}
+
+.wallet-card.status-bronze {
+  background: linear-gradient(160deg, #2d2119 0%, #7b4a28 58%, #c98945 132%);
+}
+
+.wallet-card.status-silver {
+  background: linear-gradient(160deg, #232629 0%, #737b82 58%, #d7dde2 132%);
+}
+
+.wallet-card.status-gold {
+  background: linear-gradient(160deg, #2b2110 0%, #9b6b13 58%, #f4c95d 132%);
+}
+
+.wallet-card.status-platinum {
+  background: linear-gradient(160deg, #172421 0%, #55756f 58%, #d4eee9 132%);
+}
+
+.wallet-card.status-diamond {
+  background: linear-gradient(160deg, #151f2b 0%, #245f7c 52%, #b9f2ff 132%);
+}
+
 .wallet-card h1 {
   font-size: clamp(24px, 4vw, 34px);
   overflow-wrap: anywhere;
@@ -285,6 +309,28 @@ select {
   font-size: 14px;
   font-weight: 700;
   margin-top: 8px;
+}
+
+.status-strip {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 14px;
+}
+
+.status-strip span {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.status-strip strong {
+  color: white;
+  font-size: 18px;
 }
 
 .brand-row,

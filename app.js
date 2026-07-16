@@ -6,6 +6,14 @@ const MILESTONES = [
   { stamps: 7, benefit: "10%", label: "10% de remise" },
   { stamps: 10, benefit: "20%", label: "20% de remise" },
 ];
+const STATUS_LEVELS = [
+  { min: 5, key: "diamond", label: "Diamant" },
+  { min: 4, key: "platinum", label: "Platine" },
+  { min: 3, key: "gold", label: "Or" },
+  { min: 2, key: "silver", label: "Argent" },
+  { min: 1, key: "bronze", label: "Bronze" },
+  { min: 0, key: "new", label: "Nouveau" },
+];
 
 const restaurants = [
   { id: "strasbourg", name: "Flam's Strasbourg", city: "Strasbourg" },
@@ -224,6 +232,7 @@ function initAuthPage() {
       marketingConsent: formData.get("marketingConsent") === "on",
       stampCount: 0,
       rewardsRedeemed: 0,
+      completedCards: 0,
       redeemedMilestones: [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -282,8 +291,12 @@ function renderClientCard(card) {
   const nextMilestone = getNextMilestone(card.stampCount);
   const currentBenefit = getCurrentBenefit(card.stampCount);
   const availableBenefit = getAvailableBenefit(card);
+  const status = getCustomerStatus(card);
+  const walletCard = document.querySelector(".wallet-card");
+  walletCard.className = `wallet-card status-${status.key}`;
   document.querySelector("#card-name").textContent = `${card.firstName} ${card.lastName}`;
   document.querySelector("#card-number").textContent = card.cardNumber;
+  document.querySelector("#client-status").textContent = status.label;
   document.querySelector("#stamp-count").textContent = `${card.stampCount}/${STAMP_TARGET}`;
   document.querySelector("#reward-status").textContent = nextMilestone
     ? `Encore ${nextMilestone.stamps - card.stampCount} tampon${nextMilestone.stamps - card.stampCount > 1 ? "s" : ""} avant ${nextMilestone.label}`
@@ -295,7 +308,7 @@ function renderClientCard(card) {
       : "Prochain palier : 5% au 4eme tampon";
   document.querySelector("#client-progress").style.width = `${(card.stampCount / STAMP_TARGET) * 100}%`;
   document.querySelector("#metric-my-stamps").textContent = card.stampCount;
-  document.querySelector("#metric-my-rewards").textContent = card.rewardsRedeemed;
+  document.querySelector("#metric-my-completed").textContent = card.completedCards || 0;
   renderStamps(document.querySelector("#client-stamps"), card.stampCount);
   renderMilestones(document.querySelector("#milestone-track"), card.stampCount);
   renderBenefitList(document.querySelector("#benefit-list"), card);
@@ -312,6 +325,11 @@ function renderClientCard(card) {
 
 function getCurrentBenefit(stampCount) {
   return [...MILESTONES].reverse().find((milestone) => stampCount >= milestone.stamps);
+}
+
+function getCustomerStatus(card) {
+  const completedCards = card.completedCards || 0;
+  return STATUS_LEVELS.find((level) => completedCards >= level.min);
 }
 
 function getNextMilestone(stampCount) {
@@ -482,6 +500,7 @@ function redeemReward(cardNumber) {
   if (isFinalBenefit) {
     card.stampCount = 0;
     card.redeemedMilestones = [];
+    card.completedCards = (card.completedCards || 0) + 1;
   }
   card.rewardsRedeemed += 1;
   card.updatedAt = new Date().toISOString();
@@ -646,6 +665,7 @@ function seedDemoData() {
       marketingConsent,
       stampCount,
       rewardsRedeemed,
+      completedCards: rewardsRedeemed,
       redeemedMilestones: [],
       createdAt: new Date(Date.now() - Math.random() * 86400000 * 20).toISOString(),
       updatedAt: new Date(Date.now() - Math.random() * 86400000 * 3).toISOString(),
