@@ -318,8 +318,7 @@ select {
   width: 28%;
 }
 
-.card-illustration,
-.stamp-board {
+.card-illustration {
   align-items: center;
   background: rgba(255, 248, 232, 0.98);
   border: 1px solid rgba(255, 255, 255, 0.46);
@@ -331,45 +330,12 @@ select {
   padding: 12px;
 }
 
-.card-illustration img,
-.stamp-board > img {
+.card-illustration img {
   display: block;
   max-height: 150px;
   max-width: 100%;
   object-fit: contain;
   width: 100%;
-}
-
-.stamp-board {
-  aspect-ratio: 550 / 600;
-  background: transparent;
-  border: 0;
-  border-radius: 0;
-  isolation: isolate;
-  min-height: 0;
-  padding: 0;
-  position: relative;
-}
-
-.stamp-board > img {
-  height: 100%;
-  max-height: none;
-  position: relative;
-  z-index: 0;
-}
-
-.stamp-board .stamp-grid {
-  bottom: 15%;
-  left: 13%;
-  position: absolute;
-  right: 13%;
-  top: 20%;
-  transform: rotate(-7deg);
-  z-index: 1;
-}
-
-.sample-board .stamp-grid {
-  opacity: 0.85;
 }
 
 .stamp-grid {
@@ -421,13 +387,16 @@ select {
 
 .card-art {
   align-items: center;
-  background: #fff8e8;
+  background:
+    radial-gradient(circle at var(--art-x, 22%) 18%, color-mix(in srgb, var(--art-primary, #d8261f) 82%, white) 0 19%, transparent 20%),
+    radial-gradient(circle at 82% var(--art-y, 72%), var(--art-secondary, #f0b323) 0 24%, transparent 25%),
+    linear-gradient(135deg, #fff8e8 0%, #fffdf8 54%, #f6eadb 100%);
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 18px;
   color: var(--ink);
   display: flex;
   justify-content: center;
-  min-height: 190px;
+  min-height: 170px;
   overflow: hidden;
   position: relative;
 }
@@ -442,12 +411,12 @@ select {
 .card-art::before {
   background: color-mix(in srgb, var(--art-primary, #d8261f) 88%, white);
   filter: blur(0);
-  height: 180px;
-  left: var(--art-x, 18%);
+  height: 210px;
+  left: calc(var(--art-x, 18%) - 12%);
   opacity: 0.9;
-  top: -42px;
+  top: -62px;
   transform: rotate(var(--art-tilt, -18deg));
-  width: 82px;
+  width: 92px;
 }
 
 .card-art::after {
@@ -462,7 +431,7 @@ select {
 .art-line {
   background: var(--ink);
   border-radius: 999px;
-  height: 9px;
+  height: 7px;
   left: var(--line-left);
   opacity: 0.92;
   position: absolute;
@@ -481,6 +450,18 @@ select {
   position: absolute;
   top: var(--dot-top);
   width: var(--dot-size);
+  z-index: 1;
+}
+
+.art-ring {
+  border: 3px solid var(--art-accent, #1b7f55);
+  border-radius: 50%;
+  height: var(--ring-size);
+  left: var(--ring-left);
+  opacity: 0.9;
+  position: absolute;
+  top: var(--ring-top);
+  width: var(--ring-size);
   z-index: 1;
 }
 

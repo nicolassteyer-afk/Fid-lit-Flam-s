@@ -212,7 +212,6 @@ Ce dossier est prevu pour les logos, SVG, PNG, fonds de carte, motifs, icones ou
 Assets actuellement utilises :
 
 - `2025-09-FLAMS-Valise-Logo_LOGO-BDX.svg` : logo du header et de la carte.
-- `2025-09-FLAMS-Valise-Logo_ILLU-PLANCHE-BDX.svg` : illustration principale de la carte digitale.
 
 ## Etat technique V1
 

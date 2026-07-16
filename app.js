@@ -165,6 +165,15 @@ function renderCardArt(container, cardNumber) {
     dot.style.setProperty("--dot-size", `${8 + ((hash >> (index + 4)) % 18)}px`);
     container.append(dot);
   }
+
+  for (let index = 0; index < 3; index += 1) {
+    const ring = document.createElement("span");
+    ring.className = "art-ring";
+    ring.style.setProperty("--ring-left", `${12 + ((hash >> (index + 8)) % 68)}%`);
+    ring.style.setProperty("--ring-top", `${12 + ((hash >> (index + 11)) % 62)}%`);
+    ring.style.setProperty("--ring-size", `${24 + ((hash >> (index + 7)) % 38)}px`);
+    container.append(ring);
+  }
 }
 
 function renderEventItem(event) {
@@ -301,6 +310,7 @@ function renderClientCard(card) {
   document.querySelector("#metric-my-stamps").textContent = card.stampCount;
   document.querySelector("#metric-my-rewards").textContent = card.rewardsRedeemed;
   renderStamps(document.querySelector("#client-stamps"), card.stampCount);
+  renderCardArt(document.querySelector("#card-art"), card.cardNumber);
   renderMilestones(document.querySelector("#milestone-track"), card.stampCount);
   renderBenefitList(document.querySelector("#benefit-list"), card);
 
