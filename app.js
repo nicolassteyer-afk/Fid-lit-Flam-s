@@ -297,14 +297,14 @@ function initCardPage() {
   }
 
   renderClientCard(card);
-  document.querySelector("#copy-card-code").addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(card.cardNumber);
-      showToast("Code carte copie.");
-    } catch {
-      showToast(card.cardNumber);
-    }
+  document.querySelector("#show-card-code").addEventListener("click", () => {
+    const display = document.querySelector("#card-code-display");
+    const button = document.querySelector("#show-card-code");
+    const isVisible = display.classList.toggle("is-visible");
+    button.textContent = isVisible ? "Masquer le code" : "Afficher le code";
   });
+
+  document.querySelector("#download-card").addEventListener("click", () => downloadClientCard(card));
 
   document.querySelector("#logout-client").addEventListener("click", () => {
     sessionStorage.removeItem(SESSION_KEY);
@@ -342,6 +342,7 @@ function renderClientCard(card) {
   walletCard.className = `wallet-card status-${status.key}`;
   document.querySelector("#card-name").textContent = `${card.firstName} ${card.lastName}`;
   document.querySelector("#card-number").textContent = card.cardNumber;
+  document.querySelector("#card-code-large").textContent = card.cardNumber;
   document.querySelector("#client-status").textContent = status.label;
   document.querySelector("#stamp-count").textContent = `${card.stampCount}/${STAMP_TARGET}`;
   document.querySelector("#reward-status").textContent = nextMilestone
@@ -367,6 +368,161 @@ function renderClientCard(card) {
     return;
   }
   for (const event of events) history.append(renderEventItem(event));
+}
+
+async function downloadClientCard(card) {
+  const status = getCustomerStatus(card);
+  const canvas = document.createElement("canvas");
+  const width = 1080;
+  const height = 1600;
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  const downloadedAt = new Date();
+  const gradient = ctx.createLinearGradient(0, 0, width, height);
+  const colors = getStatusCanvasColors(status.key);
+  gradient.addColorStop(0, colors[0]);
+  gradient.addColorStop(0.58, colors[1]);
+  gradient.addColorStop(1, colors[2]);
+
+  ctx.fillStyle = gradient;
+  roundRect(ctx, 0, 0, width, height, 64);
+  ctx.fill();
+
+  ctx.fillStyle = "rgba(255,255,255,0.92)";
+  roundRect(ctx, 70, 70, 260, 120, 18);
+  ctx.fill();
+  ctx.fillStyle = "#d8261f";
+  ctx.font = "900 58px Arial";
+  ctx.fillText("FLAM'S", 95, 148);
+
+  ctx.fillStyle = "#f0b323";
+  ctx.font = "800 34px Arial";
+  ctx.fillText("CARTE FIDELITE", 70, 260);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "900 76px Arial";
+  wrapCanvasText(ctx, `${card.firstName} ${card.lastName}`, 70, 350, 900, 86);
+
+  ctx.fillStyle = "rgba(255,255,255,0.76)";
+  ctx.font = "700 34px Courier New";
+  ctx.fillText(card.cardNumber, 70, 470);
+
+  ctx.fillStyle = "rgba(255,255,255,0.14)";
+  roundRect(ctx, 70, 540, 940, 135, 28);
+  ctx.fill();
+  ctx.fillStyle = "rgba(255,255,255,0.78)";
+  ctx.font = "800 30px Arial";
+  ctx.fillText("STATUT", 105, 595);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "900 48px Arial";
+  ctx.fillText(status.label, 105, 650);
+
+  ctx.fillStyle = "rgba(255,255,255,0.14)";
+  roundRect(ctx, 70, 725, 940, 360, 32);
+  ctx.fill();
+  const dragonImage = await loadImage("assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-DRAGON-JAUNE.svg");
+  drawCanvasStamps(ctx, card.stampCount, 110, 765, 160, 32, dragonImage);
+
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "900 56px Arial";
+  ctx.fillText(`${card.stampCount}/${STAMP_TARGET} tampons`, 70, 1180);
+
+  const benefit = getAvailableBenefit(card);
+  ctx.fillStyle = "rgba(255,255,255,0.78)";
+  ctx.font = "700 34px Arial";
+  ctx.fillText(benefit ? `${benefit.label} disponible` : "Aucun avantage disponible", 70, 1245);
+
+  ctx.fillStyle = "rgba(255,255,255,0.14)";
+  roundRect(ctx, 70, 1320, 940, 120, 24);
+  ctx.fill();
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "900 44px Courier New";
+  ctx.fillText(card.cardNumber, 105, 1395);
+
+  ctx.fillStyle = "rgba(255,255,255,0.72)";
+  ctx.font = "700 28px Arial";
+  ctx.fillText(`Telechargee le ${downloadedAt.toLocaleDateString("fr-FR")} a ${downloadedAt.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}`, 70, 1510);
+
+  const link = document.createElement("a");
+  link.download = `carte-flams-${card.cardNumber}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+  showToast("Carte telechargee en PNG.");
+}
+
+function getStatusCanvasColors(statusKey) {
+  const palettes = {
+    new: ["#211f1c", "#3a332a", "#d8261f"],
+    bronze: ["#2d2119", "#7b4a28", "#c98945"],
+    silver: ["#232629", "#737b82", "#d7dde2"],
+    gold: ["#2b2110", "#9b6b13", "#f4c95d"],
+    platinum: ["#172421", "#55756f", "#d4eee9"],
+    diamond: ["#151f2b", "#245f7c", "#b9f2ff"],
+  };
+  return palettes[statusKey] || palettes.new;
+}
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const image = new Image();
+    image.onload = () => resolve(image);
+    image.onerror = reject;
+    image.src = src;
+  });
+}
+
+function drawCanvasStamps(ctx, stampCount, startX, startY, size, gap, stampImage) {
+  for (let index = 0; index < STAMP_TARGET; index += 1) {
+    const row = Math.floor(index / 5);
+    const col = index % 5;
+    const x = startX + col * (size + gap);
+    const y = startY + row * (size + gap);
+    ctx.beginPath();
+    ctx.arc(x + size / 2, y + size / 2, size / 2, 0, Math.PI * 2);
+    ctx.fillStyle = index < stampCount ? "#fff8e8" : "rgba(255,255,255,0.12)";
+    ctx.fill();
+    ctx.strokeStyle = index < stampCount ? "#f0b323" : "rgba(255,255,255,0.38)";
+    ctx.lineWidth = 6;
+    ctx.setLineDash(index < stampCount ? [] : [14, 12]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    if (index < stampCount) {
+      const imageSize = size * 0.76;
+      ctx.drawImage(stampImage, x + (size - imageSize) / 2, y + (size - imageSize) / 2, imageSize, imageSize);
+    }
+  }
+}
+
+function roundRect(ctx, x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+}
+
+function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight) {
+  const words = text.split(" ");
+  let line = "";
+  let currentY = y;
+  for (const word of words) {
+    const testLine = line ? `${line} ${word}` : word;
+    if (ctx.measureText(testLine).width > maxWidth && line) {
+      ctx.fillText(line, x, currentY);
+      line = word;
+      currentY += lineHeight;
+    } else {
+      line = testLine;
+    }
+  }
+  ctx.fillText(line, x, currentY);
 }
 
 function getCurrentBenefit(stampCount) {

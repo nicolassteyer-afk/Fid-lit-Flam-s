@@ -343,6 +343,34 @@ select {
   font-size: 18px;
 }
 
+.card-code-display {
+  background: rgba(255, 255, 255, 0.94);
+  border: 3px solid var(--gold);
+  border-radius: 16px;
+  color: var(--ink);
+  display: none;
+  gap: 8px;
+  padding: 22px 16px;
+  text-align: center;
+}
+
+.card-code-display.is-visible {
+  display: grid;
+}
+
+.card-code-display span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.card-code-display strong {
+  font-family: "Courier New", monospace;
+  font-size: clamp(26px, 7vw, 42px);
+  overflow-wrap: anywhere;
+}
+
 .brand-row,
 .reward-row,
 .wallet-actions,
