@@ -745,6 +745,57 @@ td p {
   max-width: 320px;
 }
 
+.setting-help {
+  color: var(--muted);
+  line-height: 1.5;
+  margin-top: 12px;
+}
+
+.switch-control {
+  align-items: center;
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  font-weight: 800;
+  gap: 10px;
+}
+
+.switch-control input {
+  height: 1px;
+  opacity: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.switch-track {
+  background: #d8d0c4;
+  border-radius: 999px;
+  display: inline-flex;
+  height: 32px;
+  padding: 4px;
+  transition: 160ms ease;
+  width: 58px;
+}
+
+.switch-track::before {
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(33, 31, 28, 0.2);
+  content: "";
+  display: block;
+  height: 24px;
+  transition: 160ms ease;
+  width: 24px;
+}
+
+.switch-control input:checked + .switch-track {
+  background: var(--green);
+}
+
+.switch-control input:checked + .switch-track::before {
+  transform: translateX(26px);
+}
+
 .toast {
   background: var(--ink);
   border-radius: 8px;

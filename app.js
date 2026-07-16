@@ -25,6 +25,9 @@ const restaurants = [
 const initialState = {
   cards: [],
   events: [],
+  settings: {
+    dailyStampLimitEnabled: true,
+  },
 };
 
 const state = loadState();
@@ -35,7 +38,15 @@ function loadState() {
   if (!stored) return structuredClone(initialState);
 
   try {
-    return JSON.parse(stored);
+    const parsed = JSON.parse(stored);
+    return {
+      ...structuredClone(initialState),
+      ...parsed,
+      settings: {
+        ...structuredClone(initialState).settings,
+        ...(parsed.settings || {}),
+      },
+    };
   } catch {
     return structuredClone(initialState);
   }
@@ -124,6 +135,7 @@ function getTodayKey() {
 }
 
 function hasStampToday(cardNumber) {
+  if (!state.settings.dailyStampLimitEnabled) return false;
   const today = getTodayKey();
   return state.events.some((event) => {
     return event.cardNumber === cardNumber && event.type === "stamp_added" && event.createdAt.slice(0, 10) === today;
@@ -546,6 +558,12 @@ function initAdminPage() {
   document.querySelector("#admin-client-filter").addEventListener("input", renderClientTable);
   document.querySelector("#export-csv").addEventListener("click", exportCsv);
   document.querySelector("#seed-demo").addEventListener("click", seedDemoData);
+  document.querySelector("#daily-stamp-limit-toggle").addEventListener("change", (event) => {
+    state.settings.dailyStampLimitEnabled = event.currentTarget.checked;
+    saveState();
+    renderSettings();
+    showToast(state.settings.dailyStampLimitEnabled ? "Limite quotidienne activee." : "Limite quotidienne desactivee.");
+  });
   renderAdmin();
 }
 
@@ -562,6 +580,16 @@ function renderAdmin() {
   renderRestaurantTable();
   renderClientTable();
   renderEventList();
+  renderSettings();
+}
+
+function renderSettings() {
+  const toggle = document.querySelector("#daily-stamp-limit-toggle");
+  const label = document.querySelector("#daily-stamp-limit-label");
+  if (!toggle || !label) return;
+
+  toggle.checked = state.settings.dailyStampLimitEnabled;
+  label.textContent = state.settings.dailyStampLimitEnabled ? "Activee" : "Desactivee";
 }
 
 function renderRestaurantTable() {
