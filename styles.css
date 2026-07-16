@@ -47,8 +47,16 @@ select {
   color: var(--ink);
   display: inline-flex;
   font-weight: 800;
-  gap: 10px;
+  gap: 12px;
   text-decoration: none;
+}
+
+.brand-logo {
+  display: block;
+  height: 42px;
+  max-width: 150px;
+  object-fit: contain;
+  width: auto;
 }
 
 .main-nav {
@@ -250,7 +258,7 @@ select {
 }
 
 .wallet-card {
-  background: linear-gradient(160deg, #211f1c 0%, #3a332a 55%, #d8261f 130%);
+  background: linear-gradient(160deg, #211f1c 0%, #3a332a 58%, #d8261f 132%);
   border-radius: 22px;
   box-shadow: 0 24px 70px rgba(33, 31, 28, 0.24);
   color: white;
@@ -301,11 +309,33 @@ select {
   width: 54px;
 }
 
-.brand .logo-mark {
-  color: white;
-  font-size: 20px;
-  height: 38px;
-  width: 38px;
+.card-logo {
+  background: white;
+  border-radius: 8px;
+  display: block;
+  max-width: 104px;
+  padding: 8px;
+  width: 28%;
+}
+
+.card-illustration {
+  align-items: center;
+  background: rgba(255, 248, 232, 0.98);
+  border: 1px solid rgba(255, 255, 255, 0.46);
+  border-radius: 16px;
+  display: flex;
+  justify-content: center;
+  min-height: 150px;
+  overflow: hidden;
+  padding: 12px;
+}
+
+.card-illustration img {
+  display: block;
+  max-height: 150px;
+  max-width: 100%;
+  object-fit: contain;
+  width: 100%;
 }
 
 .stamp-grid {
@@ -748,6 +778,15 @@ td p {
   .main-nav,
   .main-nav a {
     width: 100%;
+  }
+
+  .brand {
+    width: 100%;
+  }
+
+  .brand-logo {
+    height: 36px;
+    max-width: 132px;
   }
 
   .auth-shell,
