@@ -1,5 +1,5 @@
 const STAMP_TARGET = 10;
-const STORAGE_KEY = "flams-loyalty-v3";
+const STORAGE_KEY = "flams-loyalty-v4";
 const SESSION_KEY = "flams-current-client";
 const MILESTONES = [
   { stamps: 4, benefit: "5%", label: "5% de remise" },
@@ -34,7 +34,7 @@ const state = loadState();
 const page = document.body.dataset.page;
 
 function loadState() {
-  const stored = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("flams-loyalty-v2") || localStorage.getItem("flams-loyalty-v1");
+  const stored = localStorage.getItem(STORAGE_KEY);
   if (!stored) return structuredClone(initialState);
 
   try {
