@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin - Flam's Fidelite</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="admin">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Accueil Flam's Fidelite">
+        <span class="logo-mark">F</span>
+        <span>Flam's Fidelite</span>
+      </a>
+      <nav class="main-nav" aria-label="Navigation">
+        <a href="index.html">Client</a>
+        <a href="restaurant.html">Restaurant</a>
+        <a class="is-active" href="admin.html">Admin</a>
+      </nav>
+    </header>
+
+    <main class="admin-shell">
+      <section class="panel">
+        <p class="eyebrow">Siege franchise</p>
+        <h1>Pilotage reseau</h1>
+        <div class="metrics">
+          <article>
+            <span>Cartes creees</span>
+            <strong id="metric-cards">0</strong>
+          </article>
+          <article>
+            <span>Tampons distribues</span>
+            <strong id="metric-stamps">0</strong>
+          </article>
+          <article>
+            <span>Recompenses utilisees</span>
+            <strong id="metric-rewards">0</strong>
+          </article>
+          <article>
+            <span>Opt-in marketing</span>
+            <strong id="metric-optin">0%</strong>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Restaurants</p>
+            <h2>Performance par point de vente</h2>
+          </div>
+          <div class="toolbar admin-actions">
+            <button class="secondary" type="button" id="seed-demo">Donnees demo</button>
+            <button class="secondary" type="button" id="export-csv">Exporter CSV</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Restaurant</th>
+                <th>Cartes</th>
+                <th>Tampons</th>
+                <th>Recompenses</th>
+                <th>Activite</th>
+              </tr>
+            </thead>
+            <tbody id="restaurant-table"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Clients</p>
+            <h2>Base fidelite</h2>
+          </div>
+          <input id="admin-client-filter" class="inline-input" placeholder="Filtrer client, carte, email" />
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>Carte</th>
+                <th>Tampons</th>
+                <th>Restaurant</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody id="client-table"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Activite recente</h2>
+        <div class="event-list" id="event-list"></div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

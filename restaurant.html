@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Restaurant - Flam's Fidelite</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="restaurant">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Accueil Flam's Fidelite">
+        <span class="logo-mark">F</span>
+        <span>Flam's Fidelite</span>
+      </a>
+      <nav class="main-nav" aria-label="Navigation">
+        <a href="index.html">Client</a>
+        <a class="is-active" href="restaurant.html">Restaurant</a>
+        <a href="admin.html">Admin</a>
+      </nav>
+    </header>
+
+    <main class="page-grid">
+      <section class="panel">
+        <p class="eyebrow">Point de vente</p>
+        <h1>Tamponner une carte</h1>
+        <div class="form">
+          <label>
+            Restaurant
+            <select id="staff-restaurant-select"></select>
+          </label>
+          <label>
+            Code carte, email, telephone ou nom
+            <input id="card-search" placeholder="FLAMS-123456 ou client@email.fr" />
+          </label>
+          <button class="primary" type="button" id="search-card">Rechercher</button>
+        </div>
+        <div class="divider"></div>
+        <div class="toolbar">
+          <button class="secondary" type="button" id="show-reward-cards">Cartes a recompenser</button>
+          <button class="secondary" type="button" id="show-recent-cards">Clients recents</button>
+        </div>
+        <div class="event-list compact" id="restaurant-shortlist"></div>
+      </section>
+
+      <section class="panel result-panel" id="staff-card-panel">
+        <p class="empty">Aucune carte selectionnee.</p>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Flam's Fidelite - Connexion client</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="auth">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Accueil Flam's Fidelite">
+        <span class="logo-mark">F</span>
+        <span>Flam's Fidelite</span>
+      </a>
+      <nav class="main-nav" aria-label="Navigation">
+        <a class="is-active" href="index.html">Client</a>
+        <a href="restaurant.html">Restaurant</a>
+        <a href="admin.html">Admin</a>
+      </nav>
+    </header>
+
+    <main class="auth-shell">
+      <section class="auth-panel">
+        <p class="eyebrow">Carte digitale</p>
+        <h1>Creer ma carte Flam's</h1>
+        <p class="lead">Creez votre compte fidelite pour acceder a votre carte digitale et suivre vos tampons.</p>
+
+        <form id="customer-form" class="form">
+          <label>
+            Prenom
+            <input name="firstName" autocomplete="given-name" required />
+          </label>
+          <label>
+            Nom
+            <input name="lastName" autocomplete="family-name" required />
+          </label>
+          <label>
+            Email
+            <input name="email" type="email" autocomplete="email" required />
+          </label>
+          <label>
+            Telephone
+            <input name="phone" type="tel" autocomplete="tel" required />
+          </label>
+          <label>
+            Mot de passe
+            <input name="password" type="password" autocomplete="new-password" minlength="6" required />
+          </label>
+          <label>
+            Restaurant d'inscription
+            <select name="restaurantId" id="restaurant-select" required></select>
+          </label>
+          <label class="check">
+            <input name="marketingConsent" type="checkbox" />
+            <span>J'accepte de recevoir les offres Flam's.</span>
+          </label>
+          <button class="primary" type="submit">Creer ma carte</button>
+        </form>
+
+        <div class="divider"></div>
+
+        <form id="login-form" class="form compact-form">
+          <h2>J'ai deja une carte</h2>
+          <label>
+            Email
+            <input name="email" type="email" autocomplete="email" required />
+          </label>
+          <label>
+            Mot de passe
+            <input name="password" type="password" autocomplete="current-password" required />
+          </label>
+          <button class="secondary" type="submit">Acceder a ma carte</button>
+        </form>
+      </section>
+
+      <aside class="auth-visual">
+        <div class="wallet-card sample-card">
+          <div class="brand-row">
+            <div>
+              <p class="eyebrow">Apercu</p>
+              <h2>Votre carte digitale</h2>
+              <p class="card-number">FLAMS-000000</p>
+            </div>
+            <span class="logo-mark">F</span>
+          </div>
+          <div class="stamp-grid" id="sample-stamps"></div>
+          <div class="reward-row">
+            <span>10 tampons = 1 recompense</span>
+            <strong>0/10</strong>
+          </div>
+          <div class="card-art" id="sample-art" aria-label="Apercu du dessin de carte"></div>
+        </div>
+      </aside>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

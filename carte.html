@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ma carte Flam's</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="card">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Accueil Flam's Fidelite">
+        <span class="logo-mark">F</span>
+        <span>Flam's Fidelite</span>
+      </a>
+      <nav class="main-nav" aria-label="Navigation">
+        <a class="is-active" href="carte.html">Ma carte</a>
+        <a href="restaurant.html">Restaurant</a>
+        <a href="admin.html">Admin</a>
+      </nav>
+    </header>
+
+    <main class="page-grid client-page">
+      <section class="phone-preview" aria-live="polite">
+        <div class="client-stack">
+          <div class="wallet-card">
+            <div class="brand-row">
+              <div>
+                <p class="eyebrow">Carte digitale</p>
+                <h1 id="card-name">Invite Flam's</h1>
+                <p class="card-number" id="card-number">FLAMS-0000</p>
+              </div>
+              <span class="logo-mark">F</span>
+            </div>
+            <div class="stamp-grid" id="client-stamps"></div>
+            <div class="reward-row">
+              <span id="reward-status">Encore 10 tampons avant la recompense</span>
+              <strong id="stamp-count">0/10</strong>
+            </div>
+            <div class="progress-track"><span id="client-progress"></span></div>
+            <div class="card-art" id="card-art" aria-label="Dessin unique de la carte"></div>
+            <div class="wallet-actions">
+              <button type="button" class="secondary" id="copy-card-code">Copier le code</button>
+              <button type="button" class="secondary" disabled>Wallet bientot</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel">
+        <p class="eyebrow">Espace client</p>
+        <h2>Mon activite</h2>
+        <div class="metrics mini-metrics">
+          <article>
+            <span>Tampons</span>
+            <strong id="metric-my-stamps">0</strong>
+          </article>
+          <article>
+            <span>Recompenses</span>
+            <strong id="metric-my-rewards">0</strong>
+          </article>
+        </div>
+        <div class="divider"></div>
+        <h2>Historique</h2>
+        <div class="event-list compact" id="client-history"></div>
+        <div class="divider"></div>
+        <button class="secondary" type="button" id="logout-client">Se deconnecter</button>
+      </aside>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
