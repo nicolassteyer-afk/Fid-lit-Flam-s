@@ -597,46 +597,6 @@ select {
   width: 230px;
 }
 
-.card-deco-flame {
-  opacity: 0.18;
-  right: 16px;
-  top: 132px;
-  width: 74px;
-  animation: float-mark 4.4s ease-in-out infinite;
-}
-
-.card-mini-scene {
-  align-items: center;
-  background: rgba(255, 248, 232, 0.12);
-  border: 1px solid rgba(255, 248, 232, 0.2);
-  border-radius: 14px;
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  min-height: 58px;
-  overflow: hidden;
-}
-
-.card-mini-scene img {
-  filter: drop-shadow(0 8px 14px rgba(33, 31, 28, 0.2));
-  height: 52px;
-  object-fit: contain;
-  transform-origin: center bottom;
-  width: 64px;
-}
-
-.card-mini-scene img:nth-child(1) {
-  animation: mini-bounce 4s ease-in-out infinite;
-}
-
-.card-mini-scene img:nth-child(2) {
-  animation: mini-bounce 4s ease-in-out 0.35s infinite;
-}
-
-.card-mini-scene img:nth-child(3) {
-  animation: mini-bounce 4s ease-in-out 0.7s infinite;
-}
-
 .card-illustration {
   align-items: center;
   background: rgba(255, 248, 232, 0.98);
@@ -1367,26 +1327,6 @@ td p {
 
   50% {
     transform: translateY(-1px);
-  }
-}
-
-@keyframes float-mark {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-
-  50% {
-    transform: translateY(-8px) rotate(4deg);
-  }
-}
-
-@keyframes mini-bounce {
-  0%, 100% {
-    transform: translateY(0) rotate(0deg);
-  }
-
-  45% {
-    transform: translateY(-4px) rotate(-2deg);
   }
 }
 
