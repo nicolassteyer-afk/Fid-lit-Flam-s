@@ -8,9 +8,9 @@
     <meta name="theme-color" content="#d8261f" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Flam's" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=5" />
   </head>
-  <body data-page="auth">
+  <body class="client-page client-auth-page" data-page="auth">
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="Accueil Flam's Fidelite">
         <img class="brand-logo" src="assets/brand/2025-09-FLAMS-Valise-Logo_LOGO-BDX.svg" alt="Flam's" />
@@ -23,10 +23,13 @@
       </nav>
     </header>
 
-    <main class="auth-shell">
-      <section class="auth-panel">
+    <main class="auth-shell client-auth-shell">
+      <div class="client-bg-mark client-bg-mark-dragon" aria-hidden="true"></div>
+      <div class="client-bg-mark client-bg-mark-flame" aria-hidden="true"></div>
+      <section class="auth-panel client-auth-panel">
+        <img class="auth-panel-mark" src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-FLAMME-ROUGE.svg" alt="" aria-hidden="true" />
         <p class="eyebrow">Carte digitale</p>
-        <h1>Creer ma carte Flam's</h1>
+        <h1 class="client-auth-title">Creer ma carte Flam's</h1>
         <p class="lead">Creez votre compte fidelite pour acceder a votre carte digitale et suivre vos tampons.</p>
 
         <form id="customer-form" class="form">
@@ -79,6 +82,8 @@
 
       <aside class="auth-visual">
         <div class="wallet-card sample-card">
+          <img class="card-deco card-deco-dragon" src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-DRAGON-BEIGE.svg" alt="" aria-hidden="true" />
+          <img class="card-deco card-deco-flame" src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-FLAMME-JAUNE.svg" alt="" aria-hidden="true" />
           <div class="brand-row">
             <div>
               <p class="eyebrow">Apercu</p>
@@ -91,11 +96,16 @@
             <span>10 tampons = 1 recompense</span>
             <strong>0/10</strong>
           </div>
+          <div class="card-mini-scene" aria-hidden="true">
+            <img src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-BIERE-JAUNE.svg" alt="" />
+            <img src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-VIN-BEIGE.svg" alt="" />
+            <img src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-FUT-JAUNE.svg" alt="" />
+          </div>
           <div class="stamp-grid client-stamps" id="sample-stamps"></div>
         </div>
       </aside>
     </main>
 
-    <script src="app.js"></script>
+    <script src="app.js?v=5"></script>
   </body>
 </html>

@@ -250,6 +250,42 @@ main {
   padding: clamp(24px, 4vw, 44px);
 }
 
+.client-auth-shell {
+  position: relative;
+}
+
+.client-auth-panel {
+  background:
+    linear-gradient(135deg, rgba(255, 248, 232, 0.98), rgba(255, 255, 255, 0.96));
+  overflow: hidden;
+  position: relative;
+}
+
+.auth-panel-mark {
+  opacity: 0.1;
+  pointer-events: none;
+  position: absolute;
+  right: -24px;
+  top: -20px;
+  transform: rotate(8deg);
+  width: 130px;
+}
+
+.client-auth-title {
+  animation: text-rise 640ms ease both;
+  max-width: 520px;
+}
+
+.client-auth-panel .form,
+.client-auth-panel .lead,
+.client-auth-panel .eyebrow,
+.client-auth-panel h1,
+.client-auth-panel h2,
+.client-auth-panel .divider {
+  position: relative;
+  z-index: 1;
+}
+
 .login-panel {
   width: 100%;
 }
