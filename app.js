@@ -304,6 +304,12 @@ function initAuthPage() {
   setupScrollReveals();
   fillRestaurantSelect(document.querySelector("#restaurant-select"));
   renderStamps(document.querySelector("#sample-stamps"), 0);
+  const googleButton = document.querySelector("#google-signup");
+  if (googleButton) {
+    googleButton.addEventListener("click", () => {
+      showToast("Connexion Google bientot disponible avec l'authentification securisee.");
+    });
+  }
 
   document.querySelector("#customer-form").addEventListener("submit", (event) => {
     event.preventDefault();
