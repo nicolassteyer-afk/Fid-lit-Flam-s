@@ -1,4 +1,4 @@
-const CACHE_NAME = "flams-fidelite-v3";
+const CACHE_NAME = "flams-fidelite-v4";
 const APP_SHELL = [
   "./",
   "./index.html",
@@ -11,7 +11,16 @@ const APP_SHELL = [
   "./app.js",
   "./manifest.webmanifest",
   "./assets/brand/2025-09-FLAMS-Valise-Logo_LOGO-BDX.svg",
-  "./assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-DRAGON-JAUNE.svg"
+  "./assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-BIERE-JAUNE.svg",
+  "./assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-DRAGON-BEIGE.svg",
+  "./assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-DRAGON-JAUNE.svg",
+  "./assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-DRAGON-ROUGE.svg",
+  "./assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-FLAMME-BDX.svg",
+  "./assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-FLAMME-JAUNE.svg",
+  "./assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-FLAMME-ROUGE.svg",
+  "./assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-FUT-JAUNE.svg",
+  "./assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-PLANCHE-ROUGE.svg",
+  "./assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-VIN-BEIGE.svg"
 ];
 
 self.addEventListener("install", (event) => {

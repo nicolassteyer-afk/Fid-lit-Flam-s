@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-title" content="Flam's" />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body data-page="card">
+  <body class="client-page" data-page="card">
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="Accueil Flam's Fidelite">
         <img class="brand-logo" src="assets/brand/2025-09-FLAMS-Valise-Logo_LOGO-BDX.svg" alt="Flam's" />
@@ -24,9 +24,13 @@
     </header>
 
     <main class="client-shell">
+      <div class="client-bg-mark client-bg-mark-dragon" aria-hidden="true"></div>
+      <div class="client-bg-mark client-bg-mark-flame" aria-hidden="true"></div>
       <section class="client-card-area" aria-live="polite">
         <div class="client-stack">
           <div class="wallet-card">
+            <img class="card-deco card-deco-dragon" src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-DRAGON-BEIGE.svg" alt="" aria-hidden="true" />
+            <img class="card-deco card-deco-flame" src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-FLAMME-JAUNE.svg" alt="" aria-hidden="true" />
             <div class="brand-row">
               <div>
                 <p class="eyebrow">Carte digitale</p>
@@ -37,8 +41,8 @@
             </div>
 
             <div class="status-strip">
-              <span>Statut</span>
-              <strong id="client-status">Nouveau</strong>
+              <span>Statut fidelite</span>
+              <strong id="client-status" class="animated-status">Nouveau</strong>
             </div>
 
             <div class="card-code-display" id="card-code-display" aria-live="polite">
@@ -47,6 +51,12 @@
             </div>
 
             <div class="client-reward-banner" id="client-current-benefit">Aucun avantage actif</div>
+
+            <div class="card-mini-scene" aria-hidden="true">
+              <img src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-BIERE-JAUNE.svg" alt="" />
+              <img src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-VIN-BEIGE.svg" alt="" />
+              <img src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-FUT-JAUNE.svg" alt="" />
+            </div>
 
             <div class="stamp-grid client-stamps" id="client-stamps"></div>
             <div class="reward-row">
@@ -64,9 +74,10 @@
       </section>
 
       <aside class="client-side">
-        <section class="panel">
+        <section class="panel client-summary-panel">
+          <img class="panel-illustration" src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-PLANCHE-ROUGE.svg" alt="" aria-hidden="true" />
           <p class="eyebrow">Espace client</p>
-          <h2>Mon activite</h2>
+          <h2 class="text-pop">Mon activite</h2>
         <div class="metrics mini-metrics">
           <article>
             <span>Tampons</span>
@@ -79,9 +90,10 @@
         </div>
         </section>
 
-        <section class="panel">
+        <section class="panel client-benefit-panel">
+          <img class="panel-illustration small" src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-FLAMME-ROUGE.svg" alt="" aria-hidden="true" />
           <p class="eyebrow">Paliers</p>
-          <h2>Mes avantages</h2>
+          <h2 class="text-pop delayed">Mes avantages</h2>
           <div class="benefit-list" id="benefit-list"></div>
         </section>
 
