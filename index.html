@@ -8,7 +8,7 @@
     <meta name="theme-color" content="#d8261f" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="Flam's" />
-    <link rel="stylesheet" href="styles.css?v=5" />
+    <link rel="stylesheet" href="styles.css?v=6" />
   </head>
   <body class="client-page client-auth-page" data-page="auth">
     <header class="topbar">
@@ -23,14 +23,114 @@
       </nav>
     </header>
 
+    <a class="floating-signup-button" href="#signup-form">Creer ma carte</a>
+
     <main class="auth-shell client-auth-shell">
       <div class="client-bg-mark client-bg-mark-dragon" aria-hidden="true"></div>
       <div class="client-bg-mark client-bg-mark-flame" aria-hidden="true"></div>
-      <section class="auth-panel client-auth-panel">
-        <img class="auth-panel-mark" src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-FLAMME-ROUGE.svg" alt="" aria-hidden="true" />
-        <p class="eyebrow">Carte digitale</p>
-        <h1 class="client-auth-title">Creer ma carte Flam's</h1>
-        <p class="lead">Creez votre compte fidelite pour acceder a votre carte digitale et suivre vos tampons.</p>
+      <aside class="auth-visual">
+        <div class="wallet-card sample-card">
+          <img class="card-deco card-deco-dragon" src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-DRAGON-BEIGE.svg" alt="" aria-hidden="true" />
+          <div class="brand-row">
+            <div>
+              <p class="eyebrow">Apercu</p>
+              <h2>Votre carte digitale</h2>
+              <p class="card-number">FLAMS-000000</p>
+            </div>
+            <img class="card-logo" src="assets/brand/2025-09-FLAMS-Valise-Logo_LOGO-BDX.svg" alt="Flam's" />
+          </div>
+          <div class="reward-row">
+            <span>10 tampons = 1 recompense</span>
+            <strong>0/10</strong>
+          </div>
+          <div class="stamp-grid client-stamps" id="sample-stamps"></div>
+        </div>
+      </aside>
+
+      <section class="loyalty-story" aria-labelledby="loyalty-story-title">
+        <div class="story-intro reveal-on-scroll">
+          <p class="eyebrow">Programme fidelite</p>
+          <h2 id="loyalty-story-title">Un parcours simple, visible, et vraiment utile.</h2>
+          <p>Chaque passage en restaurant fait avancer la carte. Les avantages arrivent avant la carte complete, pour donner envie de revenir sans attendre la fin.</p>
+        </div>
+
+        <div class="story-steps">
+          <article class="story-card reveal-on-scroll">
+            <span class="story-number">01</span>
+            <img src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-DRAGON-ROUGE.svg" alt="" aria-hidden="true" />
+            <h3>Je cree ma carte</h3>
+            <p>Le client cree son compte, choisit son restaurant d'inscription et retrouve sa carte digitale apres connexion.</p>
+          </article>
+
+          <article class="story-card reveal-on-scroll">
+            <span class="story-number">02</span>
+            <img src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-FLAMME-JAUNE.svg" alt="" aria-hidden="true" />
+            <h3>Je presente mon code</h3>
+            <p>Le code carte s'affiche en grand pour etre lu rapidement par l'equipe restaurant au moment de l'achat.</p>
+          </article>
+
+          <article class="story-card reveal-on-scroll">
+            <span class="story-number">03</span>
+            <img src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-PLANCHE-ROUGE.svg" alt="" aria-hidden="true" />
+            <h3>Je collectionne les tampons</h3>
+            <p>Un achat permet d'ajouter un tampon digital. La progression reste claire, lisible et accessible depuis le mobile.</p>
+          </article>
+        </div>
+
+        <div class="reward-explainer reveal-on-scroll">
+          <div>
+            <p class="eyebrow">Avantages</p>
+            <h2>Des gains avant la carte complete.</h2>
+            <p>Le client voit tout de suite les paliers importants : 4, 7 et 10 tampons. Chaque palier devient disponible cote restaurant au bon moment.</p>
+          </div>
+          <div class="reward-ladder" aria-label="Paliers du programme">
+            <article>
+              <span>4</span>
+              <strong>5%</strong>
+              <p>Premier avantage</p>
+            </article>
+            <article>
+              <span>7</span>
+              <strong>10%</strong>
+              <p>Palier intermediaire</p>
+            </article>
+            <article>
+              <span>10</span>
+              <strong>20%</strong>
+              <p>Carte complete</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="status-explainer reveal-on-scroll">
+          <div>
+            <p class="eyebrow">Statuts</p>
+            <h2>La carte evolue avec le client.</h2>
+            <p>Plus le client complete de cartes, plus son statut progresse. Le fond de carte change pour rendre l'evolution visible et motivante.</p>
+          </div>
+          <div class="status-ribbon" aria-label="Statuts fidelite">
+            <span>Bronze</span>
+            <span>Argent</span>
+            <span>Or</span>
+            <span>Platine</span>
+            <span>Diamant</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="auth-panel client-auth-panel" id="signup-form">
+        <div class="auth-card-head">
+          <p class="eyebrow">Carte digitale</p>
+          <h1 class="client-auth-title">Creer ma carte Flam's</h1>
+          <p>Vous avez deja une carte ? <a href="#login-form">Connectez-vous.</a></p>
+        </div>
+
+        <div class="auth-choice-grid" aria-label="Actions rapides">
+          <a class="auth-choice" href="#customer-form">Nouvelle carte</a>
+          <a class="auth-choice" href="#login-form">Connexion</a>
+        </div>
+
+        <div class="auth-separator"><span>OU</span></div>
 
         <form id="customer-form" class="form">
           <label>
@@ -64,7 +164,7 @@
           <button class="primary" type="submit">Creer ma carte</button>
         </form>
 
-        <div class="divider"></div>
+        <div class="auth-separator"><span>Deja inscrit</span></div>
 
         <form id="login-form" class="form compact-form">
           <h2>J'ai deja une carte</h2>
@@ -80,26 +180,8 @@
         </form>
       </section>
 
-      <aside class="auth-visual">
-        <div class="wallet-card sample-card">
-          <img class="card-deco card-deco-dragon" src="assets/brand/2025-09-FLAMS-Valise-Logo_ILLU-DRAGON-BEIGE.svg" alt="" aria-hidden="true" />
-          <div class="brand-row">
-            <div>
-              <p class="eyebrow">Apercu</p>
-              <h2>Votre carte digitale</h2>
-              <p class="card-number">FLAMS-000000</p>
-            </div>
-            <img class="card-logo" src="assets/brand/2025-09-FLAMS-Valise-Logo_LOGO-BDX.svg" alt="Flam's" />
-          </div>
-          <div class="reward-row">
-            <span>10 tampons = 1 recompense</span>
-            <strong>0/10</strong>
-          </div>
-          <div class="stamp-grid client-stamps" id="sample-stamps"></div>
-        </div>
-      </aside>
     </main>
 
-    <script src="app.js?v=5"></script>
+    <script src="app.js?v=6"></script>
   </body>
 </html>

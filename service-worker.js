@@ -1,4 +1,4 @@
-const CACHE_NAME = "flams-fidelite-v5";
+const CACHE_NAME = "flams-fidelite-v6";
 const APP_SHELL = [
   "./",
   "./index.html",
