@@ -1,9 +1,11 @@
-const CACHE_NAME = "flams-fidelite-v2";
+const CACHE_NAME = "flams-fidelite-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./carte.html",
+  "./restaurant-login.html",
   "./restaurant.html",
+  "./admin-login.html",
   "./admin.html",
   "./styles.css",
   "./app.js",

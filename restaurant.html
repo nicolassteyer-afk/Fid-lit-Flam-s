@@ -17,14 +17,20 @@
       <nav class="main-nav" aria-label="Navigation">
         <a href="index.html">Client</a>
         <a class="is-active" href="restaurant.html">Restaurant</a>
-        <a href="admin.html">Admin</a>
+        <a href="admin-login.html">Admin</a>
       </nav>
     </header>
 
     <main class="page-grid">
       <section class="panel">
-        <p class="eyebrow">Point de vente</p>
-        <h1>Tamponner une carte</h1>
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">Point de vente</p>
+            <h1>Tamponner une carte</h1>
+          </div>
+          <button class="secondary" type="button" id="logout-restaurant">Deconnexion</button>
+        </div>
+        <p class="session-line">Session ouverte : <strong id="restaurant-session-name">Restaurant</strong></p>
         <div class="form">
           <label>
             Restaurant

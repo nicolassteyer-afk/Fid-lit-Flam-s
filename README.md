@@ -210,8 +210,10 @@ Priorite :
 
 1. `index.html` : creation de compte client et connexion.
 2. `carte.html` : carte digitale client apres connexion.
-3. `restaurant.html` : recherche, tamponnage et recompense.
-4. `admin.html` : statistiques, restaurants, clients et export CSV.
+3. `restaurant-login.html` : connexion equipe par point de vente.
+4. `restaurant.html` : recherche, tamponnage et recompense limitee au restaurant connecte.
+5. `admin-login.html` : connexion siege franchise.
+6. `admin.html` : statistiques, restaurants, clients et export CSV.
 
 ## Assets de marque
 
@@ -233,7 +235,16 @@ La V1 actuelle est volontairement simple :
 - application web statique,
 - donnees stockees dans le navigateur via `localStorage`,
 - session client stockee via `sessionStorage`,
+- sessions restaurant et admin stockees via `sessionStorage`,
 - mot de passe encode pour demo uniquement.
+
+Identifiants de demonstration :
+
+- Restaurant Strasbourg : `strasbourg` / `flams-strasbourg`
+- Restaurant Lille : `lille` / `flams-lille`
+- Restaurant Lyon : `lyon` / `flams-lyon`
+- Restaurant Paris : `paris` / `flams-paris`
+- Admin : `admin` / `flams-admin`
 
 Ce fonctionnement permet de tester rapidement le parcours produit, mais ne doit pas etre utilise tel quel en production.
 

@@ -110,6 +110,7 @@ main {
 }
 
 .auth-shell,
+.login-shell,
 .page-grid,
 .admin-shell {
   display: grid;
@@ -119,6 +120,11 @@ main {
 .auth-shell,
 .page-grid {
   grid-template-columns: minmax(0, 1fr) minmax(320px, 440px);
+}
+
+.login-shell {
+  margin: 0 auto;
+  max-width: 560px;
 }
 
 .client-shell {
@@ -172,11 +178,24 @@ main {
   padding: clamp(24px, 4vw, 44px);
 }
 
+.login-panel {
+  width: 100%;
+}
+
 .lead {
   color: var(--muted);
   line-height: 1.5;
   margin-top: 14px;
   max-width: 560px;
+}
+
+.session-line {
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+.session-line strong {
+  color: var(--ink);
 }
 
 .form {
@@ -236,6 +255,29 @@ select {
 .secondary {
   background: #f4efe8;
   color: var(--ink);
+}
+
+.credential-box {
+  background: #f8f4ee;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-top: 24px;
+  padding: 16px;
+}
+
+.credential-grid {
+  display: grid;
+  gap: 10px 14px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+}
+
+.credential-grid span {
+  color: var(--muted);
+}
+
+.credential-grid strong {
+  font-family: "Courier New", monospace;
+  overflow-wrap: anywhere;
 }
 
 .primary:disabled,

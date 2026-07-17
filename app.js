@@ -1,6 +1,8 @@
 const STAMP_TARGET = 10;
 const STORAGE_KEY = "flams-loyalty-v4";
 const SESSION_KEY = "flams-current-client";
+const RESTAURANT_SESSION_KEY = "flams-current-restaurant";
+const ADMIN_SESSION_KEY = "flams-admin-session";
 const MILESTONES = [
   { stamps: 4, benefit: "5%", label: "5% de remise" },
   { stamps: 7, benefit: "10%", label: "10% de remise" },
@@ -17,10 +19,22 @@ const STATUS_LEVELS = [
 
 const restaurants = [
   { id: "strasbourg", name: "Flam's Strasbourg", city: "Strasbourg" },
-  { id: "colmar", name: "Flam's Colmar", city: "Colmar" },
-  { id: "mulhouse", name: "Flam's Mulhouse", city: "Mulhouse" },
+  { id: "lille", name: "Flam's Lille", city: "Lille" },
+  { id: "lyon", name: "Flam's Lyon", city: "Lyon" },
   { id: "paris", name: "Flam's Paris Grands Boulevards", city: "Paris" },
 ];
+
+const restaurantAccounts = [
+  { username: "strasbourg", password: "flams-strasbourg", restaurantId: "strasbourg" },
+  { username: "lille", password: "flams-lille", restaurantId: "lille" },
+  { username: "lyon", password: "flams-lyon", restaurantId: "lyon" },
+  { username: "paris", password: "flams-paris", restaurantId: "paris" },
+];
+
+const adminAccount = {
+  username: "admin",
+  password: "flams-admin",
+};
 
 const initialState = {
   cards: [],
@@ -74,6 +88,10 @@ function getRestaurant(id) {
   return restaurants.find((restaurant) => restaurant.id === id);
 }
 
+function canRestaurantAccessCard(card, restaurantId) {
+  return card.restaurantId === restaurantId || state.events.some((event) => event.restaurantId === restaurantId && event.cardNumber === card.cardNumber);
+}
+
 function normalizePhone(value) {
   return value.replaceAll(" ", "").replaceAll(".", "").replaceAll("-", "");
 }
@@ -123,10 +141,11 @@ function findCard(query) {
   });
 }
 
-function fillRestaurantSelect(select) {
+function fillRestaurantSelect(select, onlyRestaurantId = null) {
   if (!select) return;
   select.innerHTML = "";
-  for (const restaurant of restaurants) {
+  const options = onlyRestaurantId ? restaurants.filter((restaurant) => restaurant.id === onlyRestaurantId) : restaurants;
+  for (const restaurant of options) {
     select.add(new Option(`${restaurant.name} - ${restaurant.city}`, restaurant.id));
   }
 }
@@ -186,6 +205,37 @@ function showToast(message) {
   toast.textContent = message;
   toast.classList.add("is-visible");
   window.setTimeout(() => toast.classList.remove("is-visible"), 2200);
+}
+
+function normalizeLogin(value) {
+  return value.trim().toLowerCase();
+}
+
+function redirectTo(path) {
+  window.location.href = path;
+}
+
+function getRestaurantSession() {
+  const restaurantId = sessionStorage.getItem(RESTAURANT_SESSION_KEY);
+  const restaurant = getRestaurant(restaurantId);
+  return restaurant ? { restaurantId, restaurant } : null;
+}
+
+function requireRestaurantSession() {
+  const session = getRestaurantSession();
+  if (!session) {
+    redirectTo("restaurant-login.html");
+    return null;
+  }
+  return session;
+}
+
+function requireAdminSession() {
+  if (sessionStorage.getItem(ADMIN_SESSION_KEY) !== "active") {
+    redirectTo("admin-login.html");
+    return false;
+  }
+  return true;
 }
 
 function showMilestoneModal(card, milestone) {
@@ -653,17 +703,74 @@ function renderBenefitList(container, card) {
   }
 }
 
+function initRestaurantLoginPage() {
+  const activeSession = getRestaurantSession();
+  if (activeSession) redirectTo("restaurant.html");
+
+  const form = document.querySelector("#restaurant-login-form");
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const username = normalizeLogin(formData.get("username"));
+    const password = formData.get("password");
+    const account = restaurantAccounts.find((item) => item.username === username && item.password === password);
+
+    if (!account) {
+      showToast("Identifiants restaurant incorrects.");
+      return;
+    }
+
+    sessionStorage.setItem(RESTAURANT_SESSION_KEY, account.restaurantId);
+    redirectTo("restaurant.html");
+  });
+}
+
+function initAdminLoginPage() {
+  if (sessionStorage.getItem(ADMIN_SESSION_KEY) === "active") redirectTo("admin.html");
+
+  const form = document.querySelector("#admin-login-form");
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const formData = new FormData(form);
+    const username = normalizeLogin(formData.get("username"));
+    const password = formData.get("password");
+
+    if (username !== adminAccount.username || password !== adminAccount.password) {
+      showToast("Identifiants admin incorrects.");
+      return;
+    }
+
+    sessionStorage.setItem(ADMIN_SESSION_KEY, "active");
+    redirectTo("admin.html");
+  });
+}
+
 function initRestaurantPage() {
-  fillRestaurantSelect(document.querySelector("#staff-restaurant-select"));
+  const session = requireRestaurantSession();
+  if (!session) return;
+
+  const restaurantSelect = document.querySelector("#staff-restaurant-select");
+  fillRestaurantSelect(restaurantSelect, session.restaurantId);
+  restaurantSelect.disabled = true;
+  document.querySelector("#restaurant-session-name").textContent = session.restaurant.name;
+  document.querySelector("#logout-restaurant").addEventListener("click", () => {
+    sessionStorage.removeItem(RESTAURANT_SESSION_KEY);
+    redirectTo("restaurant-login.html");
+  });
+
   const searchInput = document.querySelector("#card-search");
   const searchButton = document.querySelector("#search-card");
-  const restaurantSelect = document.querySelector("#staff-restaurant-select");
 
   searchButton.addEventListener("click", () => {
     const card = findCard(searchInput.value);
     if (!card) {
       renderStaffCard(null);
       showToast("Carte introuvable.");
+      return;
+    }
+    if (!canRestaurantAccessCard(card, session.restaurantId)) {
+      renderStaffCard(null);
+      showToast("Cette carte n'appartient pas a la base de ce restaurant.");
       return;
     }
     renderStaffCard(card);
@@ -788,8 +895,7 @@ function redeemReward(cardNumber) {
 function renderRestaurantShortlist(mode) {
   const container = document.querySelector("#restaurant-shortlist");
   const restaurantId = document.querySelector("#staff-restaurant-select").value;
-  const relevantEvents = state.events.filter((event) => event.restaurantId === restaurantId);
-  let cards = state.cards.filter((card) => card.restaurantId === restaurantId || relevantEvents.some((event) => event.cardNumber === card.cardNumber));
+  let cards = state.cards.filter((card) => canRestaurantAccessCard(card, restaurantId));
 
   if (mode === "rewards") cards = cards.filter((card) => card.stampCount >= STAMP_TARGET);
   cards = cards.sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt)).slice(0, 5);
@@ -817,6 +923,12 @@ function renderRestaurantShortlist(mode) {
 }
 
 function initAdminPage() {
+  if (!requireAdminSession()) return;
+
+  document.querySelector("#logout-admin").addEventListener("click", () => {
+    sessionStorage.removeItem(ADMIN_SESSION_KEY);
+    redirectTo("admin-login.html");
+  });
   document.querySelector("#admin-client-filter").addEventListener("input", renderClientTable);
   document.querySelector("#export-csv").addEventListener("click", exportCsv);
   document.querySelector("#seed-demo").addEventListener("click", seedDemoData);
@@ -1091,8 +1203,8 @@ function seedDemoData() {
 
   const demoCards = [
     ["Camille", "Martin", "camille.martin@example.com", "06 11 22 33 44", "strasbourg", 8, 1, true],
-    ["Nicolas", "Weber", "nicolas.weber@example.com", "06 22 33 44 55", "colmar", 10, 0, true],
-    ["Lea", "Schmitt", "lea.schmitt@example.com", "06 33 44 55 66", "mulhouse", 4, 2, false],
+    ["Nicolas", "Weber", "nicolas.weber@example.com", "06 22 33 44 55", "lille", 10, 0, true],
+    ["Lea", "Schmitt", "lea.schmitt@example.com", "06 33 44 55 66", "lyon", 4, 2, false],
     ["Sarah", "Klein", "sarah.klein@example.com", "06 44 55 66 77", "paris", 6, 0, true],
     ["Thomas", "Muller", "thomas.muller@example.com", "06 55 66 77 88", "strasbourg", 2, 0, false],
   ];
@@ -1129,5 +1241,7 @@ function seedDemoData() {
 
 if (page === "auth") initAuthPage();
 if (page === "card") initCardPage();
+if (page === "restaurant-login") initRestaurantLoginPage();
 if (page === "restaurant") initRestaurantPage();
+if (page === "admin-login") initAdminLoginPage();
 if (page === "admin") initAdminPage();

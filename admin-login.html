@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Connexion admin - Flam's Fidelite</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <meta name="theme-color" content="#d8261f" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="admin-login">
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="Accueil Flam's Fidelite">
+        <img class="brand-logo" src="assets/brand/2025-09-FLAMS-Valise-Logo_LOGO-BDX.svg" alt="Flam's" />
+        <span>Fidelite</span>
+      </a>
+      <nav class="main-nav" aria-label="Navigation">
+        <a href="index.html">Client</a>
+        <a href="restaurant-login.html">Restaurant</a>
+        <a class="is-active" href="admin-login.html">Admin</a>
+      </nav>
+    </header>
+
+    <main class="login-shell">
+      <section class="auth-panel login-panel">
+        <p class="eyebrow">Espace admin</p>
+        <h1>Connexion franchise</h1>
+        <p class="lead">Acces aux statistiques globales, aux regles fidelite et a la base clients.</p>
+
+        <form id="admin-login-form" class="form">
+          <label>
+            Identifiant
+            <input name="username" autocomplete="username" required />
+          </label>
+          <label>
+            Mot de passe
+            <input name="password" type="password" autocomplete="current-password" required />
+          </label>
+          <button class="primary" type="submit">Ouvrir le dashboard admin</button>
+        </form>
+
+        <div class="credential-box">
+          <p class="eyebrow">Acces demo</p>
+          <div class="credential-grid">
+            <span>admin</span><strong>flams-admin</strong>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
